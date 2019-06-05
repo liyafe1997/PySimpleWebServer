@@ -56,7 +56,7 @@ class S(BaseHTTPRequestHandler):
             #print "SQLike Select USERNAME Result = "+result
             #userid=result.split('\n')[1].split('\t')[0]
             #print "UserID = "+userid
-            queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE userid="+userid
+            queryString = "SELECT * FROM tblog WHERE userid="+userid
             result = SQLike_Query(queryString)
 
             jsonarray = []
@@ -64,16 +64,23 @@ class S(BaseHTTPRequestHandler):
             print "SQLike Select articles Result = \n"
             print result
             for i in range(len(result)):
-                if len(result[i].split('\t')) == 6:
+                #id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+                if len(result[i].split('\t')) == 10:
                     print "A line data:"
                     print result[i].split('\t')
                     articleID= result[i].split('\t')[0]
                     data={}
                     data['articleid'] = articleID
                     data['title']=result[i].split('\t')[1]
-                    data['typeId']=result[i].split('\t')[2]
+                    data['summary']=result[i].split('\t')[2]
                     data['releaseDate']=result[i].split('\t')[3]
                     data['clickHit']=result[i].split('\t')[4]
+                    data['replyHit']=result[i].split('\t')[5]
+                    data['content']=result[i].split('\t')[6]
+                    data['typeId']=result[i].split('\t')[7]
+                    data['keyWord']=result[i].split('\t')[8]
+                    data['userid']=result[i].split('\t')[9]
+                                            
                     jsonarray.append(data)
             jsondata = json.dumps(jsonarray)
             print "jsondata:"
