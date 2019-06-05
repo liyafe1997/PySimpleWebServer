@@ -190,6 +190,28 @@ class S(BaseHTTPRequestHandler):
             for i in range(0, len(a_value)):
                 dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
+
+        #function 13: delete article by id
+        #/deletearticle?adminuser=42432&adminpassword=fadsfads&articleid=1
+        elif node == "/deletearticle"
+            queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminuser"][0])
+            result = SQLike_Query(queryString)
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            #--verifing username password
+            if result == requests["adminpassword"][0]: #password matched
+                print "Delete blog admin succeed!"
+                try:
+                    print ("Delete tblog : "+SQLike_Query("DELETE tblog WHERE userid="+str(requests["articleid"][0])))
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())
+            else:
+                print "Comment Process Login failed"
+                self.wfile.write(("failed").encode())
+        #end of delect article
+        
+
+
         elif node == "/keywordsearch":
             queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE keyWord="+str(requests["keyword"][0])  
             result = SQLike_Query(queryString)
