@@ -390,6 +390,37 @@ class S(BaseHTTPRequestHandler):
             else:
                 print "Comment Process Login failed"
                 self.wfile.write(("failed").encode())
+        elif node == "/commentlist":
+            userid = str(requests["articleid"][0])
+            #queryString = "SELECT id FROM u_account WHERE userName="+str(username)
+            #result = SQLike_Query(queryString)
+            #print "SQLike Select USERNAME Result = "+result
+            #userid=result.split('\n')[1].split('\t')[0]
+            #print "UserID = "+userid
+            queryString = "SELECT * FROM t_comment WHERE articleid="+userid
+            result = SQLike_Query(queryString)
+
+            jsonarray = []
+            result = result.split('\n')[1:]
+            print "SQLike Select comments Result = \n"
+            print result
+            for i in range(len(result)):
+                if len(result[i].split('\t')) == 6:
+                    print "A line data:"
+                    print result[i].split('\t')
+                    commentid= result[i].split('\t')[0]
+                    data={}
+                    data['commentid'] = commentid
+                    data['userid']=result[i].split('\t')[1]
+                    data['articleid']=result[i].split('\t')[2]
+                    data['content']=result[i].split('\t')[3]
+                    data['commentDate']=result[i].split('\t')[4]
+                    data['state']=result[i].split('\t')[4]
+                    jsonarray.append(data)
+            jsondata = json.dumps(jsonarray)
+            print "jsondata:"
+            print jsondata
+            self.wfile.write((jsondata).encode())
         elif node =="/deleteuser":
             #/deleteuser?adminuser=42432&adminpassword=fadsfads&userid=xxx
 
