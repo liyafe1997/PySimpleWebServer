@@ -447,6 +447,17 @@ class S(BaseHTTPRequestHandler):
             else:
                 print "Comment Process Login failed"
                 self.wfile.write(("failed").encode())
+        if node == "/adminlogin" :
+            queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminusername"][0])
+            print queryString
+            result = SQLike_Query(queryString)
+            
+            print "SQLite Result : "+result
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            if result == requests["adminpassword"][0]:
+                self.wfile.write(("ok").encode())
+            else:
+                self.wfile.write(("failed").encode())
 
 #------------------Web Services End-----------------
 
