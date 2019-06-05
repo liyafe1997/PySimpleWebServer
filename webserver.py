@@ -247,9 +247,7 @@ class S(BaseHTTPRequestHandler):
             newid = len(lines) + 1    
             print "New User ID = "+str(newid)
             #--get last article id
-            
-            #get userid
-            #--get userid
+
             #/register?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
 
             #INSERT INTO u_account VALUES
@@ -296,7 +294,82 @@ class S(BaseHTTPRequestHandler):
                 print ("UPDATE:"+SQLike_Query("UPDATE u_account SET blogtypeid="+ str(requests["blogtype"][0])+" WHERE id="+userid))
             else:
                 print "Modify blog owner info login failed!"
-        
+        elif node =="/linkadd":
+            #/linkadd?linkname=xxx&linkurl=xxx&orderno=3
+            #get last link id
+            queryString = "SELECT id FROM f_link"
+            print queryString
+            result = SQLike_Query(queryString)
+            print "SQLike Result = "
+            print result
+            lines = result.split('\n')
+            lines = [line for line in lines if line.strip()] # remove empty line
+            lines= lines[1:]
+            print lines
+            newid = str(len(lines) + 1 )   
+            print "New Link ID = "+str(newid)
+            #--get last link id
+
+            #INSERT INTO f_link VALUES
+            newid = str(newid)
+            linkName = str(requests["linkname"][0])
+            linkUrl = str(requests["linkurl"][0])
+            orderno = str(requests["orderno"][0])
+            #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+            result = SQLike_Query("INSERT INTO f_link VALUES ("+newid+","+linkName+","+linkUrl+","+orderno+")")
+            print "New Link Insert Result="
+            print result
+        elif node =="/comment":
+            #verifing username password
+            queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
+            print queryString
+            result = SQLike_Query(queryString)
+            
+            print "SQLite Result : "+result
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            
+            #--verifing username password
+            if result == requests["password"][0]: #password matched
+                print "New blog login succeed!"
+                #get last comment id
+                queryString = "SELECT id FROM t_comment"
+                print queryString
+                result = SQLike_Query(queryString)
+                print "SQLike Result = "
+                print result
+                lines = result.split('\n')
+                lines = [line for line in lines if line.strip()] # remove empty line
+                lines= lines[1:]
+                print lines
+                newid = str(len(lines) + 1)    
+                print "New comment ID = "+ newid
+                #--get last comment id
+                
+                #get user id
+                queryString = "SELECT id FROM u_account WHERE userName="+str(requests["username"][0])
+                print queryString
+                result = SQLike_Query(queryString)
+                result=result.split('\n')[1].split('\t')[0]
+                print "SQLike Result = "
+                print result
+                userid = result
+                #--get user id
+                #/comment?username=xxx&password=xxx&content=xxx&articleid=xxx
+
+                #INSERT INTO tblog VALUES
+                commentid = newid
+                articleid = str(requests["articleid"][0])
+                content = str(requests["content"][0])
+                commentDate = str(time.strftime('%Y-%m-%d',time.localtime(time.time())))
+                state = '0'
+                #SQL colunm: id,userid,articleid,content,commentDate,state
+                result = SQLike_Query("INSERT INTO t_comment VALUES ("+commentid+","+userid+","+articleid+","+content+","+commentDate+","+state+")")
+                print "New comment Insert Result="
+                print result
+            else:
+                print "Comment Process Login failed"
+
+            #/linkadd?linkname=xxx&linkurl=xxx&orderno=3
 #------------------Web Services End-----------------
 
 #------------------Web Server Load File From File System Start-----------------
@@ -330,7 +403,7 @@ class S(BaseHTTPRequestHandler):
 
         value = form.getvalue("key")
 
-        self._set_headers()
+        #self._set_headers()
         self.wfile.write(value.encode())
 
 def run(server_class, handler_class, port):
