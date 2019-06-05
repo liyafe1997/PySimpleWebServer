@@ -36,6 +36,7 @@ class S(BaseHTTPRequestHandler):
             pass
         self.end_headers()
         #--Process header
+#------------------Web Services Start-----------------
         if node == "/login" :
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
             print queryString
@@ -232,6 +233,73 @@ class S(BaseHTTPRequestHandler):
             print "jsondata:"
             print jsondata
             self.wfile.write((jsondata).encode())
+        elif node =="/register":
+            #get last artilce id
+            queryString = "SELECT id FROM u_account"
+            print queryString
+            result = SQLike_Query(queryString)
+            print "SQLike Result = "
+            print result
+            lines = result.split('\n')
+            lines = [line for line in lines if line.strip()] # remove empty line
+            lines= lines[1:]
+            print lines
+            newid = len(lines) + 1    
+            print "New User ID = "+str(newid)
+            #--get last article id
+            
+            #get userid
+            #--get userid
+            #/register?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+
+            #INSERT INTO u_account VALUES
+            newid = str(newid)
+            userName = str(requests["username"][0])
+            password = str(requests["password"][0])
+            nickName = str(requests["nickname"][0])
+            sign = str(requests["sign"][0])
+            profile = str(requests["profile"][0])
+            imagename = str(requests["imagename"][0])
+            blogtypeid = str(requests["blogtype"][0])
+            #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+            result = SQLike_Query("INSERT INTO u_account VALUES ("+newid+","+userName+","+password+","+nickName+","+sign+","+profile+","+imagename+","+blogtypeid+")")
+            print "New User Insert Result="
+            print result
+        elif node =="/blogmanage":
+            #verifing username password
+            queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
+            print queryString
+            result = SQLike_Query(queryString)
+            
+            print "SQLite Result : "+result
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            
+            #--verifing username password
+            if result == requests["password"][0]: #password matched
+
+                #get user id
+                queryString = "SELECT id FROM u_account WHERE userName="+str(requests["username"][0])
+                print queryString
+                result = SQLike_Query(queryString)
+                result=result.split('\n')[1].split('\t')[0]
+                print "SQLike Result = "
+                print result
+                userid = result
+                #--get user id
+                print "Modify blog owner info login succeed! userID="+userid 
+                #/blogmanage?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+                #id,userName,password,nickName,sign,proFile,imageName,blogtypeid
+                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET nickName="+ str(requests["nickname"][0])+" WHERE id="+userid))
+                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET sign="+ str(requests["sign"][0])+" WHERE id="+userid))
+                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET proFile="+ str(requests["profile"][0])+" WHERE id="+userid))
+                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET imageName="+ str(requests["imagename"][0])+" WHERE id="+userid))
+                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET blogtypeid="+ str(requests["blogtype"][0])+" WHERE id="+userid))
+            else:
+                print "Modify blog owner info login failed!"
+        
+#------------------Web Services End-----------------
+
+#------------------Web Server Load File From File System Start-----------------
         elif node == "/":
             try:
                 filecontent = ReadFile(os.path.split(os.path.abspath(__file__))[0]+"/WEBCONTENT/index.html")
@@ -248,7 +316,7 @@ class S(BaseHTTPRequestHandler):
             except:
                 print "File not found: "+node
                 self.wfile.write("<html><title>404 Not Found</title>404 Error<br>File " + node +" Not Found.</html>")
-
+#------------------Web Server Load File From File System End-----------------
 
             
 
