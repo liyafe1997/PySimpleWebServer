@@ -197,7 +197,7 @@ class S(BaseHTTPRequestHandler):
         #http://127.0.0.1:8081/getarticle?id=1
         elif node == "/getarticle":
             QueryString = "select * from tblog where id="+str(requests["id"][0])    
-            article_contain = SQLike_Query(QueryString)
+            article_contain = SQLike_Query(QueryString) 
             article_contain = article_contain.split('\n')#return a list with 2 room,
             a_key = article_contain[0].split('\t')
             a_value = article_contain[1].split('\t')  
