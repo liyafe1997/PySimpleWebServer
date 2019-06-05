@@ -113,24 +113,28 @@ class S(BaseHTTPRequestHandler):
                 #get userid
                 #--get userid
 #username=aaa&password=bbb&blogtitle=xxx&blogcontent=xxx&blogTypeid=123&summary=dfasfdafasd&keyword=fadfad
-
-                #INSERT INTO tblog VALUES
-                articleid = str(newid)
-                title = str(requests["blogtitle"][0])
-                summary = str(requests["summary"][0])
-                releaseDate = str(time.strftime('%Y-%m-%d',time.localtime(time.time())))
-                clickHit = '0'
-                replyHit = '0'
-                content = str(requests["blogcontent"][0])
-                typeID = str(requests["blogTypeid"][0])
-                keyWord = str(requests["keyword"][0])
-                userid = userid
-                #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-                result = SQLike_Query("INSERT INTO tblog VALUES ("+articleid+","+title+","+summary+","+releaseDate+","+clickHit+","+replyHit+","+content+","+typeID+","+keyWord+","+userid+")")
-                print "New Blog Insert Result="
-                print result
+                try:
+                    #INSERT INTO tblog VALUES
+                    articleid = str(newid)
+                    title = str(requests["blogtitle"][0])
+                    summary = str(requests["summary"][0])
+                    releaseDate = str(time.strftime('%Y-%m-%d',time.localtime(time.time())))
+                    clickHit = '0'
+                    replyHit = '0'
+                    content = str(requests["blogcontent"][0])
+                    typeID = str(requests["blogTypeid"][0])
+                    keyWord = str(requests["keyword"][0])
+                    userid = userid
+                    #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+                    result = SQLike_Query("INSERT INTO tblog VALUES ("+articleid+","+title+","+summary+","+releaseDate+","+clickHit+","+replyHit+","+content+","+typeID+","+keyWord+","+userid+")")
+                    print "New Blog Insert Result="
+                    print result
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())            
             else:
                 print "New Blog Error: Username Or Password Wrong!"
+                self.wfile.write(("failed").encode())
         elif node == "/list" : 
             queryString = "SELECT nickName FROM u_account"
             user_id = "SELECT id From u_account"
@@ -234,7 +238,7 @@ class S(BaseHTTPRequestHandler):
             print jsondata
             self.wfile.write((jsondata).encode())
         elif node =="/register":
-            #get last artilce id
+            #get last user id
             queryString = "SELECT id FROM u_account"
             print queryString
             result = SQLike_Query(queryString)
@@ -246,23 +250,26 @@ class S(BaseHTTPRequestHandler):
             print lines
             newid = len(lines) + 1    
             print "New User ID = "+str(newid)
-            #--get last article id
+            #--get last user id
 
             #/register?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
-
-            #INSERT INTO u_account VALUES
-            newid = str(newid)
-            userName = str(requests["username"][0])
-            password = str(requests["password"][0])
-            nickName = str(requests["nickname"][0])
-            sign = str(requests["sign"][0])
-            profile = str(requests["profile"][0])
-            imagename = str(requests["imagename"][0])
-            blogtypeid = str(requests["blogtype"][0])
-            #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-            result = SQLike_Query("INSERT INTO u_account VALUES ("+newid+","+userName+","+password+","+nickName+","+sign+","+profile+","+imagename+","+blogtypeid+")")
-            print "New User Insert Result="
-            print result
+            try:
+                #INSERT INTO u_account VALUES
+                newid = str(newid)
+                userName = str(requests["username"][0])
+                password = str(requests["password"][0])
+                nickName = str(requests["nickname"][0])
+                sign = str(requests["sign"][0])
+                profile = str(requests["profile"][0])
+                imagename = str(requests["imagename"][0])
+                blogtypeid = str(requests["blogtype"][0])
+                #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+                result = SQLike_Query("INSERT INTO u_account VALUES ("+newid+","+userName+","+password+","+nickName+","+sign+","+profile+","+imagename+","+blogtypeid+")")
+                print "New User Insert Result="
+                print result
+                self.wfile.write(("ok").encode())
+            except:
+                self.wfile.write(("failed").encode())
         elif node =="/blogmanage":
             #verifing username password
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
@@ -285,15 +292,21 @@ class S(BaseHTTPRequestHandler):
                 userid = result
                 #--get user id
                 print "Modify blog owner info login succeed! userID="+userid 
+
                 #/blogmanage?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
                 #id,userName,password,nickName,sign,proFile,imageName,blogtypeid
-                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET nickName="+ str(requests["nickname"][0])+" WHERE id="+userid))
-                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET sign="+ str(requests["sign"][0])+" WHERE id="+userid))
-                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET proFile="+ str(requests["profile"][0])+" WHERE id="+userid))
-                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET imageName="+ str(requests["imagename"][0])+" WHERE id="+userid))
-                print ("UPDATE:"+SQLike_Query("UPDATE u_account SET blogtypeid="+ str(requests["blogtype"][0])+" WHERE id="+userid))
+                try:
+                    print ("UPDATE:"+SQLike_Query("UPDATE u_account SET nickName="+ str(requests["nickname"][0])+" WHERE id="+userid))
+                    print ("UPDATE:"+SQLike_Query("UPDATE u_account SET sign="+ str(requests["sign"][0])+" WHERE id="+userid))
+                    print ("UPDATE:"+SQLike_Query("UPDATE u_account SET proFile="+ str(requests["profile"][0])+" WHERE id="+userid))
+                    print ("UPDATE:"+SQLike_Query("UPDATE u_account SET imageName="+ str(requests["imagename"][0])+" WHERE id="+userid))
+                    print ("UPDATE:"+SQLike_Query("UPDATE u_account SET blogtypeid="+ str(requests["blogtype"][0])+" WHERE id="+userid))
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())
             else:
                 print "Modify blog owner info login failed!"
+                self.wfile.write(("failed").encode())
         elif node =="/linkadd":
             #/linkadd?linkname=xxx&linkurl=xxx&orderno=3
             #get last link id
@@ -310,15 +323,19 @@ class S(BaseHTTPRequestHandler):
             print "New Link ID = "+str(newid)
             #--get last link id
 
-            #INSERT INTO f_link VALUES
-            newid = str(newid)
-            linkName = str(requests["linkname"][0])
-            linkUrl = str(requests["linkurl"][0])
-            orderno = str(requests["orderno"][0])
-            #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-            result = SQLike_Query("INSERT INTO f_link VALUES ("+newid+","+linkName+","+linkUrl+","+orderno+")")
-            print "New Link Insert Result="
-            print result
+            try:
+                #INSERT INTO f_link VALUES
+                newid = str(newid)
+                linkName = str(requests["linkname"][0])
+                linkUrl = str(requests["linkurl"][0])
+                orderno = str(requests["orderno"][0])
+                #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
+                result = SQLike_Query("INSERT INTO f_link VALUES ("+newid+","+linkName+","+linkUrl+","+orderno+")")
+                print "New Link Insert Result="
+                print result
+                self.wfile.write(("ok").encode()) 
+            except:
+                self.wfile.write(("failed").encode())
         elif node =="/comment":
             #verifing username password
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
@@ -355,19 +372,23 @@ class S(BaseHTTPRequestHandler):
                 userid = result
                 #--get user id
                 #/comment?username=xxx&password=xxx&content=xxx&articleid=xxx
-
-                #INSERT INTO tblog VALUES
-                commentid = newid
-                articleid = str(requests["articleid"][0])
-                content = str(requests["content"][0])
-                commentDate = str(time.strftime('%Y-%m-%d',time.localtime(time.time())))
-                state = '0'
-                #SQL colunm: id,userid,articleid,content,commentDate,state
-                result = SQLike_Query("INSERT INTO t_comment VALUES ("+commentid+","+userid+","+articleid+","+content+","+commentDate+","+state+")")
-                print "New comment Insert Result="
-                print result
+                try:
+                    #INSERT INTO tblog VALUES
+                    commentid = newid
+                    articleid = str(requests["articleid"][0])
+                    content = str(requests["content"][0])
+                    commentDate = str(time.strftime('%Y-%m-%d',time.localtime(time.time())))
+                    state = '0'
+                    #SQL colunm: id,userid,articleid,content,commentDate,state
+                    result = SQLike_Query("INSERT INTO t_comment VALUES ("+commentid+","+userid+","+articleid+","+content+","+commentDate+","+state+")")
+                    print "New comment Insert Result="
+                    print result
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())
             else:
                 print "Comment Process Login failed"
+                self.wfile.write(("failed").encode())
 
             #/linkadd?linkname=xxx&linkurl=xxx&orderno=3
 #------------------Web Services End-----------------
