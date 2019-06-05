@@ -48,12 +48,12 @@ class S(BaseHTTPRequestHandler):
             else:
                 self.wfile.write(("failed").encode())
         elif node == "/listarticle":
-            username = str(requests["username"][0])
-            queryString = "SELECT id FROM u_account WHERE userName="+str(username)
-            result = SQLike_Query(queryString)
-            print "SQLike Select USERNAME Result = "+result
-            userid=result.split('\n')[1].split('\t')[0]
-            print "UserID = "+userid
+            userid = str(requests["userid"][0])
+            #queryString = "SELECT id FROM u_account WHERE userName="+str(username)
+            #result = SQLike_Query(queryString)
+            #print "SQLike Select USERNAME Result = "+result
+            #userid=result.split('\n')[1].split('\t')[0]
+            #print "UserID = "+userid
             queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE userid="+userid
             result = SQLike_Query(queryString)
 
@@ -169,6 +169,65 @@ class S(BaseHTTPRequestHandler):
                 data['typename']=result[i].split('\t')[1]
                 data['typedescribe']=result[i].split('\t')[2]
                 jsonarray.append(data)
+            jsondata = json.dumps(jsonarray)
+            print "jsondata:"
+            print jsondata
+            self.wfile.write((jsondata).encode())
+        #http://127.0.0.1:8081/getarticle?id=1
+        elif node == "/getarticle":
+            QueryString = "select * from tblog where id="+str(requests["id"][0])    
+            article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
+            a_value = article_contain[1].split('\t')  
+            dic = {}#store contain from db save as json format
+            for i in range(0, len(a_value)):
+                dic[a_key[i]] = a_value[i]
+            self.wfile.write(json.dumps(dic).encode())
+        elif node == "/keywordsearch":
+            queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE keyWord="+str(requests["keyword"][0])  
+            result = SQLike_Query(queryString)
+
+            jsonarray = []
+            result = result.split('\n')[1:]
+            print "SQLike Select articles Result = \n"
+            print result
+            for i in range(len(result)):
+                if len(result[i].split('\t')) == 6:
+                    print "A line data:"
+                    print result[i].split('\t')
+                    articleID= result[i].split('\t')[0]
+                    data={}
+                    data['articleid'] = articleID
+                    data['title']=result[i].split('\t')[1]
+                    data['typeId']=result[i].split('\t')[2]
+                    data['releaseDate']=result[i].split('\t')[3]
+                    data['clickHit']=result[i].split('\t')[4]
+                    jsonarray.append(data)
+            jsondata = json.dumps(jsonarray)
+            print "jsondata:"
+            print jsondata
+            self.wfile.write((jsondata).encode())
+        elif node == "/typenamesearch":
+            queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE typeId="+str(requests["typeid"][0])  
+            result = SQLike_Query(queryString)
+
+            jsonarray = []
+            result = result.split('\n')[1:]
+            print "SQLike Select articles Result = \n"
+            print result
+            for i in range(len(result)):
+                if len(result[i].split('\t')) == 6:
+                    print "A line data:"
+                    print result[i].split('\t')
+                    articleID= result[i].split('\t')[0]
+                    data={}
+                    data['articleid'] = articleID
+                    data['title']=result[i].split('\t')[1]
+                    data['typeId']=result[i].split('\t')[2]
+                    data['releaseDate']=result[i].split('\t')[3]
+                    data['clickHit']=result[i].split('\t')[4]
+                    jsonarray.append(data)
             jsondata = json.dumps(jsonarray)
             print "jsondata:"
             print jsondata
