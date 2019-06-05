@@ -203,13 +203,20 @@ class S(BaseHTTPRequestHandler):
             a_value = article_contain[1].split('\t')  
             dic = {}#store contain from db save as json format
             for i in range(0, len(a_value)):
-                dic[a_key[i]] = a_value[i]
+                if (a_key[i] != ""):
+                    dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
-        elif node == "/getusernamebyuserid":
-            QueryString = "select userName from u_account where id="+str(requests["id"][0])    
-            result = SQLike_Query(QueryString)
-            result=result.split('\n')[1].split('\t')[0]
-            self.wfile.write(result.encode())
+        elif node == "/getuserinfobyuserid":
+            QueryString = "select * from u_account where id="+str(requests["userid"][0])    
+            userinfo = SQLike_Query(QueryString)
+            userinfo = userinfo.split('\n')#return a list with 2 room,
+            a_key = userinfo[0].split('\t')
+            a_value = userinfo[1].split('\t')  
+            dic = {}#store contain from db save as json format
+            for i in range(0, len(a_value)):
+                if (a_key[i] != ""):
+                    dic[a_key[i]] = a_value[i]
+            self.wfile.write(json.dumps(dic).encode())
 
         #function 13: delete article by id
         #/deletearticle?adminuser=42432&adminpassword=fadsfads&articleid=1
