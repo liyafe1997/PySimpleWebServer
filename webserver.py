@@ -205,6 +205,81 @@ class S(BaseHTTPRequestHandler):
             for i in range(0, len(a_value)):
                 dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
+
+        #function 13: delete article by id
+        #/deletearticle?adminuser=42432&adminpassword=fadsfads&articleid=1
+        elif node == "/deletearticle":
+            queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminuser"][0])
+            result = SQLike_Query(queryString)
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            #--verifing username password
+            if result == requests["adminpassword"][0]: #password matched
+                print "Delete blog admin succeed!"
+                try:
+                    print ("Delete tblog : "+SQLike_Query("DELETE tblog WHERE id="+str(requests["articleid"][0])))
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())
+            else:
+                print "Comment Process Login failed"
+                self.wfile.write(("failed").encode())
+        #end of delect article
+        
+        #function 14: delete link by id
+        #/deletelink?adminuser=42432&adminpassword=fadsfads&linkid=xxx
+        elif node == "/deletelink":
+            queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminuser"][0])
+            result = SQLike_Query(queryString)
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            #--verifing username password
+            if result == requests["adminpassword"][0]: #password matched
+                print "Delete blog admin succeed!"
+                try:
+                    print ("Delete tblog : "+SQLike_Query("DELETE f_link WHERE id="+str(requests["linkid"][0])))
+                    self.wfile.write(("ok").encode())
+                except:
+                    self.wfile.write(("failed").encode())
+            else:
+                print "Comment Process Login failed"
+                self.wfile.write(("failed").encode())
+        #end of delete link
+
+        #function 15:
+        #/deletecomment?adminuser=42432&adminpassword=fadsfads&commentid=1
+        #function 16:
+        # /deletelink?adminuser=42432&adminpassword=fadsfads&linkid=1&linkname=xxx&linkurl=xxx&orderno=xxx
+        elif node == "/deletecomment":
+            queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminuser"][0])
+            result = SQLike_Query(queryString)
+            result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
+            
+            if requests["orderno"][0] == None:
+                #--verifing username password
+                if result == requests["adminpassword"][0]: #password matched
+                    print "Delete blog admin succeed!"
+                    try:
+                        print ("Delete tblog : "+SQLike_Query("DELETE t_comment WHERE id="+str(requests["commentid"][0])))
+                        self.wfile.write(("ok").encode())
+                    except:
+                        self.wfile.write(("failed").encode())
+                else:
+                    print "Comment Process Login failed"
+                    self.wfile.write(("failed").encode())
+            else:
+                if result == requests["adminpassword"][0]: #password matched
+                    print "Delete blog admin succeed!"
+                    try:
+                        #delete friendly link
+                        print ("Delete tblog : "+SQLike_Query("DELETE t_comment WHERE id="+str(requests["commentid"][0])))
+                        self.wfile.write(("ok").encode())
+                    except:
+                        self.wfile.write(("failed").encode())
+                else:
+                    print "Comment Process Login failed"
+                    self.wfile.write(("failed").encode())
+        #end of delete comment & friendly link
+
+        
         elif node == "/keywordsearch":
             queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE keyWord="+str(requests["keyword"][0])  
             result = SQLike_Query(queryString)
@@ -286,6 +361,9 @@ class S(BaseHTTPRequestHandler):
                 self.wfile.write(("ok").encode())
             except:
                 self.wfile.write(("failed").encode())
+
+        #function 9
+        #/blogmanage?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
         elif node =="/blogmanage":
             #verifing username password
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
@@ -352,6 +430,7 @@ class S(BaseHTTPRequestHandler):
                 self.wfile.write(("ok").encode()) 
             except:
                 self.wfile.write(("failed").encode())
+
         elif node =="/comment":
         #verifing username password
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
@@ -405,6 +484,7 @@ class S(BaseHTTPRequestHandler):
             else:
                 print "Comment Process Login failed"
                 self.wfile.write(("failed").encode())
+
         elif node == "/commentlist":
             userid = str(requests["articleid"][0])
             #queryString = "SELECT id FROM u_account WHERE userName="+str(username)
