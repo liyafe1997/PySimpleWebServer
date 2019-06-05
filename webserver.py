@@ -214,7 +214,7 @@ class S(BaseHTTPRequestHandler):
             a_value = userinfo[1].split('\t')  
             dic = {}#store contain from db save as json format
             for i in range(0, len(a_value)):
-                if (a_key[i] != ""):
+                if (a_key[i] != "" and a_key[i] != "password"):
                     dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
 
@@ -228,7 +228,7 @@ class S(BaseHTTPRequestHandler):
             if result == requests["adminpassword"][0]: #password matched
                 print "Delete blog admin succeed!"
                 try:
-                    print ("Delete tblog : "+SQLike_Query("DELETE tblog WHERE id="+str(requests["articleid"][0])))
+                    print ("Delete tblog : "+SQLike_Query("DELETE FROM tblog WHERE id="+str(requests["articleid"][0])))
                     self.wfile.write(("ok").encode())
                 except:
                     self.wfile.write(("failed").encode())
@@ -247,7 +247,7 @@ class S(BaseHTTPRequestHandler):
             if result == requests["adminpassword"][0]: #password matched
                 print "Delete blog admin succeed!"
                 try:
-                    print ("Delete tblog : "+SQLike_Query("DELETE f_link WHERE id="+str(requests["linkid"][0])))
+                    print ("Delete tblog : "+SQLike_Query("DELETE FROM f_link WHERE id="+str(requests["linkid"][0])))
                     self.wfile.write(("ok").encode())
                 except:
                     self.wfile.write(("failed").encode())
@@ -270,7 +270,7 @@ class S(BaseHTTPRequestHandler):
                 if result == requests["adminpassword"][0]: #password matched
                     print "Delete blog admin succeed!"
                     try:
-                        print ("Delete tblog : "+SQLike_Query("DELETE t_comment WHERE id="+str(requests["commentid"][0])))
+                        print ("Delete tblog : "+SQLike_Query("DELETE FROM t_comment WHERE id="+str(requests["commentid"][0])))
                         self.wfile.write(("ok").encode())
                     except:
                         self.wfile.write(("failed").encode())
@@ -282,7 +282,7 @@ class S(BaseHTTPRequestHandler):
                     print "Delete blog admin succeed!"
                     try:
                         #delete friendly link
-                        print ("Delete tblog : "+SQLike_Query("DELETE t_comment WHERE id="+str(requests["commentid"][0])))
+                        print ("Delete tblog : "+SQLike_Query("DELETE FROM t_comment WHERE id="+str(requests["commentid"][0])))
                         self.wfile.write(("ok").encode())
                     except:
                         self.wfile.write(("failed").encode())
@@ -544,9 +544,9 @@ class S(BaseHTTPRequestHandler):
                 print "Delete blog admin succeed!"
 
                 try:
-                    print ("Delete u_account : "+SQLike_Query("DELETE u_account WHERE id="+str(requests["userid"][0])))
-                    print ("Delete tblog : "+SQLike_Query("DELETE tblog WHERE userid="+str(requests["userid"][0])))
-                    print ("Delete t_comment : "+SQLike_Query("DELETE t_comment WHERE userid="+str(requests["userid"][0])))
+                    print ("Delete u_account : "+SQLike_Query("DELETE FROM u_account WHERE id="+str(requests["userid"][0])))
+                    print ("Delete tblog : "+SQLike_Query("DELETE FROM tblog WHERE userid="+str(requests["userid"][0])))
+                    print ("Delete t_comment : "+SQLike_Query("DELETE FROM t_comment WHERE userid="+str(requests["userid"][0])))
 
                     self.wfile.write(("ok").encode())
                 except:
@@ -559,11 +559,14 @@ class S(BaseHTTPRequestHandler):
             print queryString
             result = SQLike_Query(queryString)
             
-            print "SQLite Result : "+result
+            print "SQLite Result : "
+            print result
             result=result.split('\n')[1].split('\t')[0] #Get the second line(first line is colonm) and the first data
             if result == requests["adminpassword"][0]:
+                print "Admin login succed"
                 self.wfile.write(("ok").encode())
             else:
+                print "Admin login failed"
                 self.wfile.write(("failed").encode())
 
 #------------------Web Services End-----------------
