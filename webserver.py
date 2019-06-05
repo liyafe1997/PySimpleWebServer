@@ -447,7 +447,7 @@ class S(BaseHTTPRequestHandler):
             else:
                 print "Comment Process Login failed"
                 self.wfile.write(("failed").encode())
-        if node == "/adminlogin" :
+        elif node == "/adminlogin" :
             queryString = "SELECT password FROM m_account WHERE username="+str(requests["adminusername"][0])
             print queryString
             result = SQLike_Query(queryString)
@@ -493,7 +493,7 @@ class S(BaseHTTPRequestHandler):
         value = form.getvalue("key")
 
         #self._set_headers()
-        self.wfile.write(value.encode())
+        self.wfile.write("")
 
 def run(server_class, handler_class, port):
     server_address = ('', port)
