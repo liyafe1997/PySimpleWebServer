@@ -1,0 +1,49 @@
+1 列出所有blog /list  返回[{ "userid": "1", "nickname": "jack" }, { "userid": "2", "nickname": "jack" }, { "userid": "3", "nickname": "jack" }]  2 登录 /login?username=aaa&password=bbb  成功返回ok，失败返回failed  3 写blog /newblog?username=aaa&password=bbb&blogtitle=xxx&blogcontent=xxx&blogTypeid=123&summary=dfasfdafasd&keyword=fadfad  成功返回ok，失败返回failed  4 列出某个blog下所有博文 /listarticle?username=xxxxx: [{ "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "1", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "2", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "3", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "4", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "5", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "6", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "7", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "8", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "9", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "10", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "11", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "12", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "13", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "14", "title": "firstblog" }, { "releaseDate": "222", "typeId": "20190603", "clickHit": "3", "articleid": "15", "title": "firstblog" }, { "releaseDate": "0", "typeId": "2019-06-04", "clickHit": "123", "articleid": "16", "title": "xxx" }]  5 列出博客类型listblogtype  [{ "typeid": "1", "typedescribe": "xxxxxxx", "typename": "science" }]    6. 根据关键字进行搜索 /keywordsearch?keyword=xxx
+[{
+
+}]
+
+7. 根据博客类型进行搜索 /typenamesearch?typename=xxx
+[{
+
+}]
+
+8. 博客注册 /register?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+[{
+
+}]
+
+9.博主的信息管理  /blogmanage?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+修改成功返回ok，失败返回faild
+
+10. 友情链接添加
+/linkadd?adminuser=42432&adminpassword=fadsfads&linkname=xxx&linkurl=xxx&orderno=3
+修改成功返回ok，失败返回faild
+
+11. 评论功能
+/comment?username=xxx&password=xxx&content=xxx&articleid=xxx
+评论成功返回ok，失败返回faild
+
+12. 管理员删除用户（博客）
+/deleteuser?adminuser=42432&adminpassword=fadsfads&artilceid=xxx
+成功返回ok，失败返回faild
+
+13. 管理员删除博文
+/deletearticle?adminuser=42432&adminpassword=fadsfads&articleid=1
+成功返回ok，失败返回faild
+
+14.管理员删除链接
+/deletelink?adminuser=42432&adminpassword=fadsfads&linkid=xxx
+成功返回ok，失败返回faild
+
+15.管理员删除评论
+/deletecomment?adminuser=42432&adminpassword=fadsfads&commentid=1
+成功返回ok，失败返回faild
+
+16.管理员修改友情链接
+/deletelink?adminuser=42432&adminpassword=fadsfads&linkid=1&linkname=xxx&linkurl=xxx&orderno=xxx
+成功返回ok，失败返回faild
+
+17. 根据博客id列出评论
+/commentlist?blogid=123
+成功返回ok，失败返回faild
