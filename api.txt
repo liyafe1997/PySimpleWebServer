@@ -25,7 +25,7 @@
 评论成功返回ok，失败返回faild
 
 12. 管理员删除用户（博客）
-/deleteuser?adminuser=42432&adminpassword=fadsfads&artilceid=xxx
+/deleteuser?adminuser=42432&adminpassword=fadsfads&userid=xxx
 成功返回ok，失败返回faild
 
 13. 管理员删除博文
@@ -45,5 +45,5 @@
 成功返回ok，失败返回faild
 
 17. 根据博客id列出评论
-/commentlist?blogid=123
+/commentlist?articleid=123
 成功返回ok，失败返回faild
