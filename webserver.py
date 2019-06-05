@@ -30,7 +30,8 @@ class S(BaseHTTPRequestHandler):
         #Process header
         self.send_response(200)
         try:
-            if node.split('.')[-1] == ".html" or node.split('.')[-1] == ".htm":
+            if node.split('.')[-1] == "html" or node.split('.')[-1] == "htm":
+                print "html files, set header"
                 self.send_header('Content-type', 'text/html')
         except:
             pass
