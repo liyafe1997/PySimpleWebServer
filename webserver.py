@@ -136,24 +136,32 @@ class S(BaseHTTPRequestHandler):
             else:
                 print "New Blog Error: Username Or Password Wrong!"
                 self.wfile.write(("failed").encode())
-        elif node == "/list" : 
-            queryString = "SELECT nickName FROM u_account"
-            user_id = "SELECT id From u_account"
+        elif node == "/list":
+            queryString = "SELECT * FROM u_account"
             result = SQLike_Query(queryString)
-            id_result= SQLike_Query(user_id)
+
+            jsonarray = []
+            result = result.split('\n')[1:]
+            print "SQLike Select user list Result = \n"
             print result
-            result = result.split('\t\n')
-            id_result = id_result.split('\t\n')
-            print result
-            print id_result
-            jsonarray =[]
-            for i in range(1, len(result)-1):
-                d = {} 
-                d["nickname"] = result[i]
-                d["userid"] = id_result[i]
-                jsonarray.append(d)
+            for i in range(len(result)):
+                if len(result[i].split('\t')) == 8:
+                    print "A line data:"
+                    print result[i].split('\t')
+                    userid= result[i].split('\t')[0]
+                    data={}
+                    data['userid'] = userid
+                    data['username']=result[i].split('\t')[1]
+                    data['nickname']=result[i].split('\t')[3]
+                    data['sign']=result[i].split('\t')[4]
+                    data['proFile']=result[i].split('\t')[5]
+                    data['imageName']=result[i].split('\t')[6]
+                    data['blogtypeid']=result[i].split('\t')[7]
+                    jsonarray.append(data)
             jsondata = json.dumps(jsonarray)
-            self.wfile.write(jsondata.encode())
+            print "jsondata:"
+            print jsondata
+            self.wfile.write((jsondata).encode())
         elif node == "/listblogtype":
             print "List blog types"
             queryString = "SELECT * FROM t_blogtype"
