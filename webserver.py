@@ -507,11 +507,13 @@ class S(BaseHTTPRequestHandler):
             #userid=result.split('\n')[1].split('\t')[0]
             #print "UserID = "+userid
             queryString = "SELECT * FROM t_comment WHERE articleid="+userid
+            print "Comment Request string:" + queryString
+
             result = SQLike_Query(queryString)
 
             jsonarray = []
             result = result.split('\n')[1:]
-            print "SQLike Select comments Result = \n"
+            print "SQLike Select comments Result = "
             print result
             for i in range(len(result)):
                 if len(result[i].split('\t')) == 6:
