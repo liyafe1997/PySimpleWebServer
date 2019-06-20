@@ -18,6 +18,8 @@ def ReadFile(filename):
     return fileContent
 
 
+
+
 class S(BaseHTTPRequestHandler):
     def do_GET(self):
         requests = urlparse.parse_qs(urlparse.urlparse(self.path).query)
@@ -50,42 +52,20 @@ class S(BaseHTTPRequestHandler):
             else:
                 self.wfile.write(("failed").encode())
         elif node == "/listarticle":
-            userid = str(requests["userid"][0])
-            #queryString = "SELECT id FROM u_account WHERE userName="+str(username)
-            #result = SQLike_Query(queryString)
-            #print "SQLike Select USERNAME Result = "+result
-            #userid=result.split('\n')[1].split('\t')[0]
-            #print "UserID = "+userid
-            queryString = "SELECT * FROM tblog WHERE userid="+userid
-            result = SQLike_Query(queryString)
-
+            QueryString = "SELECT * FROM tblog WHERE userid="+str(requests["userid"][0])
+            article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
             jsonarray = []
-            result = result.split('\n')[1:]
-            print "SQLike Select articles Result = \n"
-            print result
-            for i in range(len(result)):
-                #id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-                if len(result[i].split('\t')) == 10:
-                    print "A line data:"
-                    print result[i].split('\t')
-                    articleID= result[i].split('\t')[0]
-                    data={}
-                    data['articleid'] = articleID
-                    data['title']=result[i].split('\t')[1]
-                    data['summary']=result[i].split('\t')[2]
-                    data['releaseDate']=result[i].split('\t')[3]
-                    data['clickHit']=result[i].split('\t')[4]
-                    data['replyHit']=result[i].split('\t')[5]
-                    data['content']=result[i].split('\t')[6]
-                    data['typeId']=result[i].split('\t')[7]
-                    data['keyWord']=result[i].split('\t')[8]
-                    data['userid']=result[i].split('\t')[9]
-                                            
-                    jsonarray.append(data)
-            jsondata = json.dumps(jsonarray)
-            print "jsondata:"
-            print jsondata
-            self.wfile.write((jsondata).encode())
+            for j in range(0, len(article_contain)):
+                right = 0
+                a_value = article_contain[j].split('\t')  
+                dic = {}#store contain from db save as json format
+                for i in range(0, len(a_value)):
+                    if (a_key[i] != ""):
+                        dic[a_key[i]] = a_value[i]
+                jsonarray.append(dic)
+            self.wfile.write(json.dumps(jsonarray).encode())
         elif node == "/newblog":
             #verifing username password
             queryString = "SELECT password FROM u_account WHERE userName="+str(requests["username"][0])
