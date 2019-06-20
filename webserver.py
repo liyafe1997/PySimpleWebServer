@@ -116,7 +116,7 @@ class S(BaseHTTPRequestHandler):
                     keyWord = str(requests["keyword"][0])
                     userid = userid
                     #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-                    result = SQLike_Query("INSERT INTO tblog VALUES ("+articleid+","+title+","+summary+","+releaseDate+","+clickHit+","+replyHit+","+content+","+typeID+","+keyWord+","+userid+")")
+                    result = SQLike_Query("INSERT INTO tblog VALUES ("+articleid+","+title+","+summary+","+releaseDate+","+clickHit+","+replyHit+","+content+","+typeID+","+keyWord+","+userid+","+str(0)+","+str(0)+")")
                     print "New Blog Insert Result="
                     print result
                     self.wfile.write(("ok").encode())
@@ -329,6 +329,7 @@ class S(BaseHTTPRequestHandler):
         elif node == "/contentsearch":
             QueryString = "SELECT * FROM tblog"
             article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')
             article_contain = [line for line in article_contain if line.strip()] # remove empty line
             a_key = article_contain[0].split('\t')
             article_contain = article_contain[1:]
