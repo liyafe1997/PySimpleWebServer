@@ -367,29 +367,21 @@ class S(BaseHTTPRequestHandler):
                 jsonarray.append(dic)
             self.wfile.write(json.dumps(jsonarray).encode())
         elif node == "/typenamesearch":
-            queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE typeId="+str(requests["typeid"][0])  
-            result = SQLike_Query(queryString)
-
+            QueryString = "SELECT * FROM tblog WHERE typeId="+str(requests["typeid"][0]) 
+            article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')
+            article_contain = [line for line in article_contain if line.strip()] # remove empty line
+            a_key = article_contain[0].split('\t')
+            article_contain = article_contain[1:]
             jsonarray = []
-            result = result.split('\n')[1:]
-            print "SQLike Select articles Result = \n"
-            print result
-            for i in range(len(result)):
-                if len(result[i].split('\t')) == 6:
-                    print "A line data:"
-                    print result[i].split('\t')
-                    articleID= result[i].split('\t')[0]
-                    data={}
-                    data['articleid'] = articleID
-                    data['title']=result[i].split('\t')[1]
-                    data['typeId']=result[i].split('\t')[2]
-                    data['releaseDate']=result[i].split('\t')[3]
-                    data['clickHit']=result[i].split('\t')[4]
-                    jsonarray.append(data)
-            jsondata = json.dumps(jsonarray)
-            print "jsondata:"
-            print jsondata
-            self.wfile.write((jsondata).encode())
+            for j in range(0, len(article_contain)):
+                a_value = article_contain[j].split('\t')  
+                dic = {}#store contain from db save as json format
+                for i in range(0, len(a_value)):
+                    if (a_key[i] != ""):
+                        dic[a_key[i]] = a_value[i]
+                jsonarray.append(dic)
+            self.wfile.write(json.dumps(jsonarray).encode())
         elif node =="/register":
             #get last user id
             queryString = "SELECT id FROM u_account"
