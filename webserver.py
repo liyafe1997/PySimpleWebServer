@@ -181,6 +181,7 @@ class S(BaseHTTPRequestHandler):
             QueryString = "select * from tblog where id="+str(requests["id"][0])    
             article_contain = SQLike_Query(QueryString) 
             article_contain = article_contain.split('\n')#return a list with 2 room,
+            article_contain = [line for line in article_contain if line.strip()] # remove empty line
             a_key = article_contain[0].split('\t')
             a_value = article_contain[1].split('\t')  
             dic = {}#store contain from db save as json format
@@ -328,8 +329,9 @@ class S(BaseHTTPRequestHandler):
         elif node == "/contentsearch":
             QueryString = "SELECT * FROM tblog"
             article_contain = SQLike_Query(QueryString)
-            article_contain = article_contain.split('\n')#return a list with 2 room,
+            article_contain = [line for line in article_contain if line.strip()] # remove empty line
             a_key = article_contain[0].split('\t')
+            article_contain = article_contain[1:]
             jsonarray = []
             for j in range(0, len(article_contain)):
                 right = 0
