@@ -206,6 +206,44 @@ class S(BaseHTTPRequestHandler):
                 if (a_key[i] != ""):
                     dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
+        #http://127.0.0.1:8081/zan?id=1
+        elif node == "/zan": 
+            QueryString = "select zan from tblog where id="+str(requests["id"][0])
+            zan=SQLike_Query(QueryString).split('\n')[1].split('\t')[0]
+            zan = int(zan)
+            zan = zan+1
+            zan = str(zan)
+            QueryString = "UPDATE tblog SET zan="+zan+" WHERE id="+str(requests["id"][0])
+            SQLike_Query(QueryString)
+            QueryString = "select zan from tblog where id="+str(requests["id"][0])    
+            article_contain = SQLike_Query(QueryString) 
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
+            a_value = article_contain[1].split('\t')  
+            dic = {}#store contain from db save as json format
+            for i in range(0, len(a_value)):
+                if (a_key[i] != ""):
+                    dic[a_key[i]] = a_value[i]
+            self.wfile.write(json.dumps(dic).encode())
+
+        elif node == "/cai":
+            QueryString = "select cai from tblog where id="+str(requests["id"][0])
+            zan=SQLike_Query(QueryString).split('\n')[1].split('\t')[0]
+            zan = int(zan)
+            zan = zan+1
+            zan = str(zan)
+            QueryString = "UPDATE tblog SET cai="+zan+" WHERE id="+str(requests["id"][0])
+            SQLike_Query(QueryString)
+            QueryString = "select cai from tblog where id="+str(requests["id"][0])    
+            article_contain = SQLike_Query(QueryString) 
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
+            a_value = article_contain[1].split('\t')  
+            dic = {}#store contain from db save as json format
+            for i in range(0, len(a_value)):
+                if (a_key[i] != ""):
+                    dic[a_key[i]] = a_value[i]
+            self.wfile.write(json.dumps(dic).encode())
         elif node == "/getuserinfobyuserid":
             QueryString = "select * from u_account where id="+str(requests["userid"][0])    
             userinfo = SQLike_Query(QueryString)
@@ -369,7 +407,9 @@ class S(BaseHTTPRequestHandler):
                 imagename = str(requests["imagename"][0])
                 blogtypeid = str(requests["blogtype"][0])
                 #SQL colunm: id,title,summary,releaseDate,clickHit,replyHit,content,typeId,keyWord,userid
-                result = SQLike_Query("INSERT INTO u_account VALUES ("+newid+","+userName+","+password+","+nickName+","+sign+","+profile+","+imagename+","+blogtypeid+")")
+                queryString = "INSERT INTO u_account VALUES ("+newid+","+userName+","+password+","+nickName+","+sign+","+profile+","+imagename+","+blogtypeid+")"
+                print queryString
+                result = SQLike_Query(queryString)
                 print "New User Insert Result="
                 print result
                 self.wfile.write(("ok").encode())
