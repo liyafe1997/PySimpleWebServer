@@ -5,7 +5,7 @@ import socket
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import json
 import time
-
+import base64
 
 global sqlikesock
 
@@ -332,30 +332,44 @@ class S(BaseHTTPRequestHandler):
         #end of delete comment & friendly link
 
         
-        elif node == "/keywordsearch":
-            queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE keyWord="+str(requests["keyword"][0])  
-            result = SQLike_Query(queryString)
-
+        elif node == "/contentsearch":
+            QueryString = "SELECT * FROM tblog"
+            article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
             jsonarray = []
-            result = result.split('\n')[1:]
-            print "SQLike Select articles Result = \n"
-            print result
-            for i in range(len(result)):
-                if len(result[i].split('\t')) == 6:
-                    print "A line data:"
-                    print result[i].split('\t')
-                    articleID= result[i].split('\t')[0]
-                    data={}
-                    data['articleid'] = articleID
-                    data['title']=result[i].split('\t')[1]
-                    data['typeId']=result[i].split('\t')[2]
-                    data['releaseDate']=result[i].split('\t')[3]
-                    data['clickHit']=result[i].split('\t')[4]
-                    jsonarray.append(data)
-            jsondata = json.dumps(jsonarray)
-            print "jsondata:"
-            print jsondata
-            self.wfile.write((jsondata).encode())
+            for j in range(0, len(article_contain)):
+                right = 0
+                a_value = article_contain[j].split('\t')  
+                dic = {}#store contain from db save as json format
+                for i in range(0, len(a_value)):
+                    if (a_key[i] != ""):
+                        if(a_key[i]=="content"):
+                            try:
+                                blogcontent = base64.decodestring(a_value[i].replace('|',',').replace('!',' ').replace('^','='))
+                                print "Search decoded blog content = "+blogcontent
+                                if (str(requests["content"][0]) in blogcontent):
+                                    right = 1
+                            except:
+                                pass
+                        dic[a_key[i]] = a_value[i]
+                if(right==1):
+                    jsonarray.append(dic)
+            self.wfile.write(json.dumps(jsonarray).encode())
+        elif node == "/keywordsearch":
+            QueryString = "SELECT * FROM tblog WHERE keyWord="+str(requests["keyword"][0])  
+            article_contain = SQLike_Query(QueryString)
+            article_contain = article_contain.split('\n')#return a list with 2 room,
+            a_key = article_contain[0].split('\t')
+            jsonarray = []
+            for j in range(0, len(article_contain)):
+                a_value = article_contain[j].split('\t')  
+                dic = {}#store contain from db save as json format
+                for i in range(0, len(a_value)):
+                    if (a_key[i] != ""):
+                        dic[a_key[i]] = a_value[i]
+                jsonarray.append(dic)
+            self.wfile.write(json.dumps(jsonarray).encode())
         elif node == "/typenamesearch":
             queryString = "SELECT id,title,typeId,releaseDate,clickHit FROM tblog WHERE typeId="+str(requests["typeid"][0])  
             result = SQLike_Query(queryString)
