@@ -235,6 +235,17 @@ class S(BaseHTTPRequestHandler):
                 if (a_key[i] != "" and a_key[i] != "password"):
                     dic[a_key[i]] = a_value[i]
             self.wfile.write(json.dumps(dic).encode())
+        elif node == "/getuserinfobyusername":
+            QueryString = "select * from u_account where userName="+str(requests["username"][0])    
+            userinfo = SQLike_Query(QueryString)
+            userinfo = userinfo.split('\n')#return a list with 2 room,
+            a_key = userinfo[0].split('\t')
+            a_value = userinfo[1].split('\t')  
+            dic = {}#store contain from db save as json format
+            for i in range(0, len(a_value)):
+                if (a_key[i] != "" and a_key[i] != "password"):
+                    dic[a_key[i]] = a_value[i]
+            self.wfile.write(json.dumps(dic).encode())
         elif node == "/listlink":
             #id,linkName,linkUrl,orderNo
             QueryString = "select * from f_link"   
