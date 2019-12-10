@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>个人博客</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+        integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script type="test/javascript" src="control.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #110915;
+        }
+
+        .wrapper {
+            width: 90%;
+            height: 1000px;
+            margin: 0 auto;
+        }
+
+        .heading {
+            width: 100%;
+            height: 90px;
+            background-color: #110915;
+            margin: 0 auto;
+
+        }
+
+        ul {
+            font-size: 30px;
+            margin-left: 40px;
+            float: left;
+            list-style-type: none;
+            padding-top: 6px;
+            padding-bottom: 6px;
+        }
+
+        a:link,
+        a:visited {
+            font-weight: bold;
+            color: #7f8fa6;
+            padding: 6px;
+            text-decoration: none;
+        }
+
+        a:hover,
+        a:active {
+            color: aqua;
+        }
+
+        .heading_title {
+            float: left;
+            font-size: 40px;
+            color: #d3c2f9;
+        }
+
+        .heading_nav {
+            padding-bottom: 50px;
+            padding-top: 20px;
+            width: 100%;
+            height: 30px;
+            position: relative;
+        }
+
+        li {
+            padding-left: 10px;
+            display: inline;
+        }
+
+        button {
+            float: right;
+            font: 18px 楷体;
+            width: 50px;
+            height: 26px;
+            position: relative;
+            border-radius: 3px;
+        }
+
+        button:hover {
+            background-color: cornflowerblue;
+            color: white;
+            box-shadow: 0 12px 16px 0 rgba(0, 0, 0, 0.24), 0 17px 50px 0 rgba(0, 0, 0, 0.19);
+        }
+
+        .heading_search {
+            /* float: right; */
+            /* width: 250px; */
+            height: 26px;
+            /* position: relative;
+            margin-top: 20px;
+            margin-right: 50px; */
+            background: #00a8ff;
+            position: absolute;
+            top: 50%;
+            left: 70%;
+            transform: translate(-50%, -50%);
+            /* height:40px; */
+            border-radius: 40px;
+            padding: 10px;
+        }
+
+        input {
+            height: 26px;
+            width: 180px;
+            font: 18px 楷体;
+        }
+
+
+        .search-btn {
+            color: #e84118;
+            float: right;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: #00a8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        #blog_keyword {
+            border: none;
+            background: none;
+            outline: none;
+            float: left;
+            padding: 0;
+            color: white;
+            font-size: 16px;
+            transition: 0.4s;
+            line-height: 20px;
+            width: 0px;
+        }
+
+        .heading_search:hover>#blog_keyword {
+            width: 240px;
+            padding: 0 6px;
+        }
+
+
+        .heading_search>.search-btn {
+            background: white;
+        }
+
+
+
+        .loginbutton {
+            float: right;
+            position: relative;
+            margin-top: 15px;
+        }
+
+        .templatemo_left {
+            float: left;
+            width: 700px;
+            margin-bottom: 15px;
+        }
+
+        #templatemo_right_section {
+            clear: both;
+            display: inline-block;
+            width: 250px;
+            padding: 15px 15px 10px 15px;
+            margin-bottom: 30px;
+            color: #dbc1a7;
+            border-top: 1px solid #361d40;
+            background: #180d1e url(images/templatemo_right_section_bg.jpg) top center no-repeat;
+            position: relative;
+            top: 37px;
+            left: 100px;
+            text-align: center;
+        }
+
+        #templatemo_right_section h2 {
+            position: absolute;
+            top: 2px;
+        }
+
+        #templatemo_right_section a {
+            color: #dbb4e0;
+            position: relative;
+            top: 12px;
+
+        }
+
+        #contenttable {
+            color: #dbc1a7;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            text-align: center;
+
+        }
+
+        table td,
+        table th {
+            border: 1px solid #cad9ea;
+            color: #666;
+            height: 30px;
+        }
+
+        table tr:nth-child(odd) {
+            background: #fff;
+        }
+
+        table tr:nth-child(even) {
+            background: #F5FAFA;
+        }
+
+        .userp {
+            font-size: 25px;
+            color: #dbc1a7;
+        }
+
+        .login_button {
+            width: 70px;
+            box-shadow: -1px -2px -2px 0 #7ed6df;
+            border-radius: 5px;
+        }
+
+        #flow_box {
+            position: absolute;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <div class="heading">
+                <div class="heading_nav">
+                    <div class="heading_title">博客浏览</div>
+                    <div class="loginbutton">
+
+                    </div>
+                    <div class="heading_navbar">
+                        <ul id="blogtype">
+
+                        </ul>
+                    </div>
+                    <div class="heading_search">
+                        <!-- <input type="text" id="blog_keyword"placeholder="Type to search">
+                            <button type="button" onClick="searchblog()" >搜索</button> -->
+                        <input type="text" id="blog_keyword" placeholder="Type to search">
+                        <p class="search-btn">
+                            <i class="fas fa-search"></i>
+                        </p>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="templatemo_left">
+                <div id="blog_link">
+                    <table id="contenttable" border="1" width="100%">
+                        <tr>
+                            <th>文章ID</td>
+                            <th>标题</td>
+                            <th>发布日期</td>
+                            <th>浏览次数</td>
+                            <th>评论数</td>
+                            <th>类型</td>
+                            <th>关键字</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div id="templatemo_right_section">
+                <h2>博主</h2>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+
+    var typeid = getQueryVariable("typeid");
+    //alert(typeid);
+    var username = $.cookie('username');
+    var userpassword = $.cookie('userpassword');
+
+
+    showBlogList();
+    // showAllBlogtype();
+    showblogbytype(typeid);
+    showAllBlogtype();
+
+
+    if (username == null) {
+        var login_button = document.createElement("input");
+        var div = document.getElementsByClassName("loginbutton");
+        login_button.setAttribute("type", "button");
+        login_button.setAttribute("value", "登陆");
+        login_button.setAttribute("onclick", "login()");
+        login_button.className = "login_button";
+        div[0].appendChild(login_button);
+    }
+
+    else {
+        var p = document.createElement("p");
+        var c = document.createTextNode("用户：" + username);
+        p.appendChild(c);
+        var div = document.getElementsByClassName("loginbutton");
+        div[0].appendChild(p);
+
+        //  var div2=doucument.createElement("div");
+        var br = document.createElement("br")
+        var quitbutton = document.createElement("input");
+        quitbutton.setAttribute("type", "button");
+        quitbutton.setAttribute("onclick", "quit()");
+        quitbutton.value = "退出账号";
+
+        var revisebutton = document.createElement("input");
+        revisebutton.setAttribute("type", "button");
+        revisebutton.value = "修改账户信息";
+        revisebutton.setAttribute("onclick", "revise()");
+        var div2 = document.createElement("div");
+        div2.id = "flow_box";
+
+        var writeblogbutton = document.createElement("input");
+        writeblogbutton.setAttribute("type", "button");
+        writeblogbutton.setAttribute("onclick", "writeblog()");
+        writeblogbutton.value = "写博客";
+        var div2 = document.createElement("div");
+        div2.id = "flow_box";
+        div2.appendChild(revisebutton);
+        div2.appendChild(br);
+        div2.appendChild(writeblogbutton)
+        div2.appendChild(br);
+        div2.appendChild(quitbutton);
+        p.className = "userp";
+        p.onmouseover = function () {
+            div[0].appendChild(div2);
+            $('#flow_box').show();
+        }
+
+        p.onmouseout = function () {
+            // 
+            timer = setTimeout(function () {
+                $('#flow_box').hide();
+            }, 500);
+
+        }
+
+        // revisebutton.onmouseover
+    }
+
+    function login() {  //转登陆页面
+        window.location.href = 'http://127.0.0.1:8081/login.html';
+    }
+
+    function writeblog() {
+        window.location.href = '/writeBlog.html';
+    }
+
+    function revise() {   //转修改页面
+        window.location.href = "/update.html";
+    }
+
+    function quit() {
+        console.log("退出");
+        $.cookie('username', null, { expires: -1 });
+        $.cookie('userpassword', null, { expires: -1 });
+        location.reload();
+    }
+
+
+
+
+
+    function showBlogList() {     //显示所有博主名
+        $.getJSON("/list", function (data) {
+            var nickNameArray = new Array();
+            var userIdArray = new Array();
+            $.each(data, function (idx, obj) {
+                var nickname = obj.nickname;
+                var userid = obj.userid;
+                nickNameArray.push(nickname);
+                userIdArray.push(userid);
+            });
+
+            for (t = 0; t < nickNameArray.length; t++) {
+                var a = document.createElement("a");
+                var node = document.createTextNode(nickNameArray[t]);
+                a.appendChild(node);
+                var targetUrl = "/Blog2copy.html?userid=" + userIdArray[t];
+                a.setAttribute("href", targetUrl);
+                var div = document.getElementById("templatemo_right_section");
+                div.appendChild(a);
+                var br = document.createElement("br");
+                div.appendChild(br);
+
+            }
+
+        });
+    }
+
+    function Base64() {
+
+        // private property
+        _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+        // public method for encoding
+        this.encode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = _utf8_encode(input);
+            while (i < input.length) {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                } else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+                    _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+            }
+            return output;
+        }
+
+        // public method for decoding
+        this.decode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            while (i < input.length) {
+                enc1 = _keyStr.indexOf(input.charAt(i++));
+                enc2 = _keyStr.indexOf(input.charAt(i++));
+                enc3 = _keyStr.indexOf(input.charAt(i++));
+                enc4 = _keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+            }
+            output = _utf8_decode(output);
+            return output;
+        }
+
+        // private method for UTF-8 encoding
+        _utf8_encode = function (string) {
+            string = string.replace(/\r\n/g, "\n");
+            var utftext = "";
+            for (var n = 0; n < string.length; n++) {
+                var c = string.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                } else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                } else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+            return utftext;
+        }
+
+        // private method for UTF-8 decoding
+        _utf8_decode = function (utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+            while (i < utftext.length) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                } else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return string;
+        }
+    }
+    function showblogbytype(typeid) {  //显示所有博文信息
+        var url = "/typenamesearch?typeid=" + typeid;
+        //alert(url);
+
+        $.getJSON(url, function (data) {
+            $.each(data, function (idx, data) {
+                var articleid = data.id;
+                // console.log(articleid);
+                var tr = document.createElement("tr");
+                var articletd = document.createElement("td");
+                var titletd = document.createElement("td");
+                var a = document.createElement("a");
+                var b = new Base64();
+                var title = data.title
+                title = title.replace('|', ',');
+                title = title.replace('!', ' ');
+                var ti = b.decode(data.title);
+                a.innerHTML = ti;
+                a.setAttribute("href", "/blog3.html?id=" + articleid);
+                titletd.appendChild(a);
+                var datetd = document.createElement("td");
+                var clicktime = document.createElement("td");
+                var replytime = document.createElement("td");
+                var type = document.createElement("td");
+                var keyweord = document.createElement("td");
+
+                articletd.append(document.createTextNode(data.id));
+                datetd.append(document.createTextNode(data.releaseDate));
+                clicktime.append(document.createTextNode(data.clickHit));
+                replytime.append(document.createTextNode(data.replyHit));
+                type.append(document.createTextNode(data.typeId));
+                keyweord.append(document.createTextNode(data.keyWord));
+
+                tr.append(articletd);
+                tr.append(titletd);
+                tr.append(datetd);
+                tr.append(clicktime);
+                tr.append(replytime);
+                tr.append(type);
+                tr.append(keyweord);
+                var table = document.getElementById("contenttable");
+                table.appendChild(tr)
+            });
+        });
+
+
+    }
+
+
+
+
+
+    function showAllBlogtype() {//显示博客类型
+
+        $.getJSON("/listblogtype", function (data) {
+
+            $.each(data, function (idx, data) {
+                var typeoption = document.createElement("a");
+                typeoption.setAttribute("href", "http://127.0.0.1:8081/indexblogtype.html?typeid=" + data.typeid);
+                typeoption.innerHTML = data.typename;
+                var ops = document.getElementById("blogtype");
+                ops.append(typeoption)
+            });
+
+        });
+
+    }
+
+
+
+
+
+
+
+    document.onkeydown = function (event) { //回车查找
+        $("#blog_keyword").empty();
+        var search_text = $('#blog_keyword').val();
+        url = "/contentsearch?content=" + search_text;
+        var e = event || window.event;
+        if (e && e.keyCode == 13) {
+            if (search_text != null) {
+                $("#contenttable").empty();
+                var table = document.getElementById("contenttable");
+                var tr1 = document.createElement("tr");
+                var th1 = document.createElement("th");
+                var th2 = document.createElement("th");
+                var th3 = document.createElement("th");
+                var th4 = document.createElement("th");
+                var th5 = document.createElement("th");
+                th1.appendChild(document.createTextNode("文章ID"));
+                th2.appendChild(document.createTextNode("标题"));
+                th3.appendChild(document.createTextNode("发布日期"));
+                th4.appendChild(document.createTextNode("浏览次数"));
+                th5.appendChild(document.createTextNode("类型"));
+                tr1.append(th1);
+                tr1.append(th2);
+                tr1.append(th3);
+                tr1.append(th4);
+                tr1.append(th5);
+                table.appendChild(tr1);
+
+                $.getJSON(url, function (data) {
+                    $.each(data, function (idx, data) {
+                        var articleid = data.id;
+                        var tr = document.createElement("tr");
+                        var articletd = document.createElement("td");
+                        var titletd = document.createElement("td");
+                        var a = document.createElement("a");
+                        a.innerHTML = data.title;
+                        a.setAttribute("href", "/blog3.html?id=" + articleid);
+                        titletd.appendChild(a);
+                        var datetd = document.createElement("td");
+                        var clicktime = document.createElement("td");
+                        // var replytime = document.createElement("td");
+                        var type = document.createElement("td");
+                        // var keyweord=document.createElement("td");
+
+                        articletd.append(document.createTextNode(data.id));
+                        datetd.append(document.createTextNode(data.releaseDate));
+                        clicktime.append(document.createTextNode(data.clickHit));
+                        // replytime.append(document.createTextNode(data.replyHit));
+                        type.append(document.createTextNode(data.typeId));
+                        // keyweord.append(document.createTextNode(data.keyWord));
+
+                        tr.append(articletd);
+                        tr.append(titletd);
+                        tr.append(datetd);
+                        tr.append(clicktime);
+                        // tr.append(replytime);
+                        tr.append(type);
+                        // tr.append(keyweord);
+                        var table = document.getElementById("contenttable");
+                        table.appendChild(tr)
+
+                    });
+
+                });
+
+            }
+            else {
+                alert("没有该类型的博客");
+            }
+        }
+    }
+
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+
+
+
+</script>
+
+</html>

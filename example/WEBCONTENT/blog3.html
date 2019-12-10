@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>个人博客空间</title>
+    <meta name="keywords" content="free blog template, blog layout, CSS, HTML" />
+
+    <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+    <!-- <link rel="stylesheet" type="text/css" href="contentslider.css" /> -->
+    <script type="text/javascript" src="contentslider.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <style >
+        #blog_title{
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+
+        .userp{
+            font-size: 25px;
+            color: #dbc1a7;
+        }
+
+        #templatemo_right{
+            width: 70px;
+            box-shadow: -1px -2px -2px 0 #7ed6df;
+            border-radius: 20px;
+        }
+
+        #templatemo_right{
+            position: relative;
+            float: right;
+            margin-top: 20px;
+	        margin-left: 40px;
+	        width: 330px;
+	        padding: 70px 0 15px 0;
+        }
+
+        
+        #flow_box{
+            position: absolute;
+            z-index: 1000;
+        }
+
+        
+    </style>
+
+</head>
+
+<body>
+    <div id="templatemo_header_panel">
+        <div id="templatemo_header_section">
+            <div id="templatemo_title_section">个人博客空间</div>
+            <div id="templatemo_right">
+                
+            </div>
+        </div>
+    </div> 
+
+    <div id="templatemo_menu_panel">
+        <div id="templatemo_menu_section">
+
+        </div>
+    </div> 
+
+    <div id="templatemo_content_container">
+        <div id="templatemo_content">
+            <div id="templatemo_content_left">
+                        <!--显示登陆信息-->
+                <div id="main_head">
+                    <div id="blog_title">
+                        <!-- 显示博客标题 -->
+                        
+                    </div>
+
+                    <div id="blog_other" >
+                        <!-- 显示关键字，发表日期，点击量 -->
+                    </div>
+                    
+                    <div id="titletag">
+                        <h1>博客正文</h1>
+                    </div>
+
+                </div>
+
+                <div id="main_body">
+
+                </div>
+
+                <div class="templatemo_post">
+
+                    <div class="post_title">
+                        <h2>评论</h2>
+
+                    </div>
+                    <div id="post_body">
+
+                    </div>
+                    <div id="entercomment">
+                        <form>
+                            <textarea id="comment_content" rows="5" cols="80"></textarea>
+
+                            <button type="button" id="submitcomment" onClick="submitComment()">提交</button>
+                        </form>
+                    </div>
+                </div>
+
+
+            </div> 
+
+            <div id="templatemo_content_right">
+
+                <!-- <div class="templatemo_right_section">
+                    <h2>功能</h2>
+
+                    <button type="button" onclick="dianzan()">点赞    </button>
+
+                </div> -->
+
+                <div id="templatemo_right_section">
+                    <h2>友情链接</h2>
+                </div>
+
+            </div>
+        </div> 
+    </div> 
+
+</body>
+<script type="text/javascript">
+
+    var username = $.cookie('username');
+    var userpassword = $.cookie('userpassword');
+
+    
+    var articleid = getQueryVariable("id")
+    $(document).ready(function () {
+        showBlogContent(articleid);
+        showBlogTitle(articleid);
+        showBlogother(articleid);
+        showLink();
+    });
+
+
+    if(username==null){
+        var login_button=document.createElement("input");
+        var div=document.getElementById("templatemo_right");
+        login_button.setAttribute("type","button");
+        login_button.setAttribute("value","登陆");
+        login_button.setAttribute("onclick","login()");
+        login_button.className="login_button";
+        div.appendChild(login_button);
+    }
+    else{
+        var p=document.createElement("p");
+        p.className="userp";
+         var c=document.createTextNode("用户："+username);
+         p.appendChild(c);
+         var div=document.getElementById("templatemo_right");
+         div.appendChild(p);
+
+
+        var br=document.createElement("br")//换行
+         var quitbutton=document.createElement("input");
+         quitbutton.setAttribute("type","button");
+         quitbutton.setAttribute("onclick","quit()");
+         quitbutton.value="退出账号";
+        
+        var revisebutton=document.createElement("input"); 
+        revisebutton.setAttribute("type","button");
+        revisebutton.value="修改账户信息";
+        revisebutton.setAttribute("onclick","revise()");
+
+        var div2=document.createElement("div");
+
+        var writeblogbutton=document.createElement("input");
+        writeblogbutton.setAttribute("type","button");
+        writeblogbutton.setAttribute("onclick","writeblog()");
+        writeblogbutton.value="写博客";
+
+         div2.id="flow_box";
+         div2.appendChild(revisebutton);
+         div2.appendChild(br);
+         div2.appendChild(writeblogbutton)
+         div2.appendChild(br);
+         div2.appendChild(quitbutton);
+         
+         p.onmouseover=function(){
+            div.appendChild(div2);
+            $('#flow_box').show();
+         } 
+
+         p.onmouseout=function(){
+                timer=setTimeout(function(){
+                    $('#flow_box').hide();
+                },700);
+
+         }
+    }
+
+    function login() {  //转登陆页面
+        window.location.href = '/login.html';
+    }
+
+
+    function writeblog(){
+        window.location.href = '/writeBlog.html';
+    }
+
+    function revise(){   //转修改页面
+    window.location.href = "/update.html";
+    }
+
+    function quit(){
+        console.log("退出");
+        $.cookie('username',null,{expires:-1});
+        $.cookie('userpassword',null,{expires:-1});
+        location.reload();
+    }
+
+
+    function getQueryVariable(variable) {  //获取当前url中id的值
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+    function Base64() {
+
+// private property
+_keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+// public method for encoding
+this.encode = function (input) {
+    var output = "";
+    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    var i = 0;
+    input = _utf8_encode(input);
+    while (i < input.length) {
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+            enc4 = 64;
+        }
+        output = output +
+            _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+            _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+    }
+    return output;
+}
+
+// public method for decoding
+this.decode = function (input) {
+    var output = "";
+    var chr1, chr2, chr3;
+    var enc1, enc2, enc3, enc4;
+    var i = 0;
+    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+    while (i < input.length) {
+        enc1 = _keyStr.indexOf(input.charAt(i++));
+        enc2 = _keyStr.indexOf(input.charAt(i++));
+        enc3 = _keyStr.indexOf(input.charAt(i++));
+        enc4 = _keyStr.indexOf(input.charAt(i++));
+        chr1 = (enc1 << 2) | (enc2 >> 4);
+        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+        chr3 = ((enc3 & 3) << 6) | enc4;
+        output = output + String.fromCharCode(chr1);
+        if (enc3 != 64) {
+            output = output + String.fromCharCode(chr2);
+        }
+        if (enc4 != 64) {
+            output = output + String.fromCharCode(chr3);
+        }
+    }
+    output = _utf8_decode(output);
+    return output;
+}
+
+// private method for UTF-8 encoding
+_utf8_encode = function (string) {
+    string = string.replace(/\r\n/g, "\n");
+    var utftext = "";
+    for (var n = 0; n < string.length; n++) {
+        var c = string.charCodeAt(n);
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        } else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        } else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+
+    }
+    return utftext;
+}
+
+// private method for UTF-8 decoding
+_utf8_decode = function (utftext) {
+    var string = "";
+    var i = 0;
+    var c = c1 = c2 = 0;
+    while (i < utftext.length) {
+        c = utftext.charCodeAt(i);
+        if (c < 128) {
+            string += String.fromCharCode(c);
+            i++;
+        } else if ((c > 191) && (c < 224)) {
+            c2 = utftext.charCodeAt(i + 1);
+            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+            i += 2;
+        } else {
+            c2 = utftext.charCodeAt(i + 1);
+            c3 = utftext.charCodeAt(i + 2);
+            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            i += 3;
+        }
+    }
+    return string;
+}
+}
+
+
+
+
+    function showBlogTitle(articleid){ //显示博客标题
+        var url = "/getarticle?id=" + articleid;
+        $.getJSON(url,function(data){
+            var articleTitle=data.title;
+            var userid=data.userid;
+            articleTitle=articleTitle.replace(',','|');
+            articleTitle=articleTitle.replace(' ','|');
+            $.getJSON("/getuserinfobyuserid?userid="+userid,function(data){
+                var nickname=data.nickName;
+                var b=new Base64();
+                var articletitle=b.decode(articleTitle);
+                var h1=document.createElement("H1");
+
+                var a=document.createElement("a");
+                a.appendChild(document.createTextNode("博主昵称："+nickname));
+                a.setAttribute("href","/Blog2copy.html?userid=" +userid);
+
+                
+                h1.appendChild(document.createTextNode("博客标题："+articletitle+" "));
+                h1.appendChild(a);
+                var div=document.getElementById("blog_title");
+                div.appendChild(h1);
+
+            });
+            
+        });    
+
+    }
+
+
+    function showBlogother(articleid){  //显示博文关键字等
+            $.getJSON("/getarticle?id=" + articleid,function(data){
+                $.each(data,function(idx,obj){
+
+                });
+                var articleKeyword=data.keyWord; //关键字
+                var articleDate=data.releaseDate; //发表日期
+                var articlezan=data.zan; //点赞数
+                var articliecai=data.cai; //点踩数
+                articleDate = articleDate.replace(',', '|');
+                articleDate = articleDate.replace(' ', '!');
+                // var b = new Base64();
+                // var articleData = b.decode(articleDate);
+                var h1=document.createElement("H2");
+                var zan=document.createElement("a");
+                zan.appendChild(document.createTextNode("点赞数："+articlezan+" "));
+                zan.setAttribute("onclick","dianzan()");
+                
+                var cai=document.createElement("a");
+                cai.appendChild(document.createTextNode("点踩数："+articliecai+" "));
+                cai.setAttribute("onclick","diancai()");
+
+
+                var br=document.createElement("br");
+                h1.appendChild(document.createTextNode("关键字:"+articleKeyword+" "+" 发表日期:"+articleDate+" "));
+                h1.append(zan);
+                h1.append(cai);
+                
+                var div = document.getElementById("blog_other");
+                div.appendChild(h1);
+            });
+            
+    }
+    
+    function dianzan(){
+        var url="/zan?id="+articleid;
+        if(username!=null){
+            $.getJSON(url,function(data){
+                data.zan=data.zan+1;
+        });
+        location.reload();
+        }
+        else{
+            alert("请先登陆");
+        }
+        
+    }
+
+    function diancai(){
+        var url="/cai?id="+articleid;
+        if(username!=null){
+        $.getJSON(url,function(data){
+                data.cai=data.cai+1;
+        });
+        location.reload();
+        }
+        else{
+            alert("请先登陆");
+        }
+    }
+
+
+
+
+
+    function showBlogContent(articleid) {    //显示博客正文
+        var url = "/getarticle?id=" + articleid;
+        $.getJSON(url, function (data) {
+            var articleContent = data.content;  //正文
+            articleContent = articleContent.replace(',', '|');
+            articleContent = articleContent.replace(' ', '!');
+            var b = new Base64();
+            var articleContent = b.decode(articleContent);
+            var p = document.createElement("p");
+            var node = document.createTextNode(articleContent);
+            p.appendChild(node);
+            var div = document.getElementById("main_body"); //改为存放标题的DIV
+            div.appendChild(p);
+        });
+        getComment();
+    }
+
+
+
+
+
+
+
+
+
+    function getComment() {  //显示评论
+        var url = "/commentlist?articleid=" + articleid;
+        commentArray = new Array();
+        nickArray=new Array();
+        $.getJSON(url, function (adata) {
+            $.each(adata, function (idx, obj) {
+                var comment = obj.content;
+                comment = comment.replace('|', ',');
+                comment = comment.replace('!', ' ');
+                comment = comment.replace('^', '=');    
+                var b = new Base64();
+                var comment = b.decode(comment);
+                userid = obj.userid;
+                //Get Username
+                $.getJSON("/getuserinfobyuserid?userid=" + userid, function (userdata) {
+                    usernamecomment = userdata.userName;
+                    nicknamecomment = userdata.nickName;
+                    commentArray.push(comment);
+                    nickArray.push(" By " + nicknamecomment + "(" + usernamecomment + ")" + " 发表日期:" + obj.commentDate);
+                    for (t = 0; t < commentArray.length; t++) {
+                        var p = document.createElement("p");
+                        var p2 = document.createElement("p");
+                        p2.appendChild(document.createTextNode(nickArray[t]));
+                        var node = document.createTextNode(commentArray[t]);
+                        p.appendChild(node);
+                        var div = document.getElementById("post_body"); 
+                        div.appendChild(p);
+                        var br = document.createElement("br");
+                        div.appendChild(br);
+                        div.appendChild(p2);
+                        div.appendChild(br);
+                        
+                    }
+                });
+            });
+        });
+
+    }
+
+
+    function submitComment() {    //提交评论内容
+        var blogcomment = $('#comment_content').val();
+
+        blogcomment = blogcomment.replace(',', '|');
+        blogcomment = blogcomment.replace(' ', '!');
+        blogcomment = blogcomment.replace('=', '^');
+        var b = new Base64();
+        var blogcomment = b.encode(blogcomment);
+        var url = "/comment?username=" + username + "&password=" + userpassword + "&content=" + blogcomment + "&articleid=" + articleid;
+
+        $.get(url, function (data) {
+
+            if (data == "ok") {
+                alert(data);
+
+                location.reload();
+
+            }
+            else {
+                alert("请先登陆账号");
+
+            }
+
+        });
+
+    }
+
+    function showLink() {   //显示友情链接
+
+        $.getJSON("/listlink", function (data) {
+
+            var linkNameArray = new Array();
+            var linkUrlArray = new Array();
+
+            $.each(data, function (idx, obj) {
+                var linkname = obj.linkName;
+                var linkurl = obj.linkUrl;
+
+                linkNameArray.push(linkname);
+                linkUrlArray.push(linkurl);
+
+            });
+
+            for (t = 0; t < linkNameArray.length; t++) {
+                var a = document.createElement("a");
+                var node = document.createTextNode(linkUrlArray[t]);
+
+                a.appendChild(node);
+
+
+                a.setAttribute("href", linkUrlArray[t]);
+                var div = document.getElementById("templatemo_right_section"); //改为存放标题的DIV
+                div.appendChild(a);
+                var br = document.createElement("br");
+                div.appendChild(br);
+
+
+            }
+
+        });
+
+
+    }
+
+    
+
+</script>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Link manage</title>
+    <meta name="keywords" content="free blog template, blog layout, CSS, HTML" />
+    <meta name="description"
+        content="free blog website layout, blog template, blog layout which you can apply for any blog CMS" />
+    <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="contentslider.css" />
+    <script type="text/javascript" src="contentslider.js">
+    </script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <script src="json2.js"></script>
+    <script type="text/javascript" src="json2.js"></script>
+    <script src="cycle.js"></script>
+
+</head>
+
+<body>
+    <div id="templatemo_header_panel">
+        <div id="templatemo_header_section">
+
+                <div id="templatemo_title_section"><a href="/admin_userlist.html">管理首页</a></div><div id="templatemo_title_section">链接管理</div>
+        </div>
+    </div> <!-- end of templatemo header panel -->
+
+    <div id="templatemo_menu_panel">
+        <div id="templatemo_menu_section">
+
+        </div>
+    </div> <!-- end of menu -->
+
+    <div id="templatemo_content_container">
+        <div id="templatemo_content">
+            <div id="templatemo_content_left">
+                <div id="main_body">
+
+
+
+                </div>
+
+                <table id="contenttable" width="100%">
+                    <tr>
+                        <td>链接ID</td>
+                        <td>链接标题</td>
+                        <td>URL</td>
+                        <td>顺序</td>
+                        <td>操作</td>
+
+                    </tr>
+
+                </table>
+                <br><br><br><br>
+                <h1>新建链接</h1>
+
+
+                    <input id="Linkname" placeholder="链接标题">
+                    <input id="Linkurl"  placeholder="链接URL">
+
+                    <input id="orderno"  placeholder="链接顺序">
+
+
+
+                <input type="submit" onClick="addLink()" id="login" name="uslogin" value="添加链接">
+
+
+
+
+
+
+            </div>
+
+
+        </div> <!-- end of content left -->
+
+        <!-- end of right content -->
+    </div> <!-- end of content -->
+    </div> <!-- end of content container -->
+
+    <div id="templatemo_bottom_panel">
+        <!-- end of templatemo bottom section -->
+    </div>
+    <!-- end of templatemo bottom panel -->
+    <!--  HTML CSS Template Designed -->
+    <div id="templatemo_footer_panel">
+        <div id="templatemo_footer_section">
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    //alert("1");
+    //alert(userid)
+    showAllBlog();
+    function showAllBlog() {
+
+
+        $.getJSON("/listlink", function (data) {
+            //alert(data);
+
+            var articlesArray = data;
+            var articleName = new Array();
+            var articleId = new Array();
+            document.getElementById("main_body").innerHTML = "<h1></h1><br><br><br><br>";
+
+
+
+
+            $.each(data, function (idx, data) {
+                //alert(title1);
+                var time = data.replyHit;
+                var articleid = data.id;
+                var tr = document.createElement("tr");
+                var linkidtd = document.createElement("td");
+                var linknametd = document.createElement("td");
+                var linkurltd = document.createElement("td");
+                var linkordertd = document.createElement("td");
+                var operationtd = document.createElement("td");
+
+
+                linkidtd.append(document.createTextNode(data.id));
+                linknametd.append(document.createTextNode(data.linkName));
+                linkurltd.append(document.createTextNode(data.linkUrl));
+                linkordertd.append(document.createTextNode(data.orderNo));
+                var operationlink = document.createElement("button")
+                operationlink.innerText = "删除";
+                operationlink.setAttribute("onclick", "deleteLink(" + data.id + ")");
+                operationtd.append(operationlink);
+                tr.append(linkidtd)
+                tr.append(linknametd)
+                tr.append(linkurltd)
+                tr.append(linkordertd)
+                tr.append(operationtd)
+                var table = document.getElementById("contenttable");
+                table.append(tr)
+
+            });
+
+
+            for (t = 0; t < articleId.length; t++) {
+                var a = document.createElement("a");
+                var node = document.createTextNode(articleName[t]);
+                a.appendChild(node);
+                var targetUrl = "127.0.0.1:8081/getarticle?id=" + articleId[t];
+                a.setAttribute("href", targetUrl);
+                var div = document.getElementById("main_body"); //改为存放标题的DIV
+                div.appendChild(a);
+                var br = document.createElement("br")
+                div.appendChild(br);
+
+
+            }
+
+        });
+
+    }
+
+    function deleteLink(linkid) {
+        var adminusername = $.cookie('adminusername');
+        var adminpassword = $.cookie('adminpassword');
+        console.log(adminusername);
+        console.log(adminpassword);
+        $.get("/deletelink?adminuser=" + adminusername + "&adminpassword=" + adminpassword + "&linkid=" + linkid, function (data) {
+
+            alert(data);
+            location.reload();
+
+        });
+
+    }
+    function addLink() {
+        var linkname = $('#Linkname').val();
+        var linkurl = $('#Linkurl').val();
+        var orderno = $('#orderno').val();
+        var adminusername = $.cookie('adminusername');
+        var adminpassword = $.cookie('adminpassword');
+        console.log(adminusername);
+        console.log(adminpassword);
+        $.get("/linkadd?adminuser=" + adminusername + "&adminpassword=" + adminpassword + "&linkname=" + linkname + "&linkurl=" + linkurl + "&orderno=" + orderno, function (data) {
+
+            alert(data);
+            location.reload();
+
+        });
+
+    }
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+</script>

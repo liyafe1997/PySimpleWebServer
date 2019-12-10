@@ -1,0 +1,52 @@
+body{
+    background: #dff9fb; 
+}
+
+.main{
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 auto;
+}
+.c {
+    width: 650px;
+    margin: 50px auto;
+}
+.c1 {
+    border: 1px solid #666666;
+    border-radius: 5px;
+}
+label {
+    width: 150px;
+    height: 30px;
+    line-height: 30px;
+    text-align: right;
+    font-size: 14px;
+    display: inline-block;
+}
+span {
+    background-color:#FFFFDA ;
+    border: 1px solid #FFCD00;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    display: inline-block;
+    margin-left: 40px ;
+
+}
+z{
+    float: right;
+}
+
+
+.d{
+    margin: 200px auto;
+    padding: 0 auto;
+    width: 100%;
+    height: auto;
+}
+.d p{
+    font-size: 20px;
+    text-align: center;
+    color: #636363;
+}

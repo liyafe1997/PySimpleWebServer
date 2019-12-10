@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>update</title>
+    <link type="text/css" rel="stylesheet" href="css/zhuce.css">
+</head>
+<script src="jquery-3.4.1.min.js"></script>
+<script src="jquery.cookie.js"></script>
+<script src="json2.js"></script>
+<script type="text/javascript" src="json2.js"></script>
+
+
+<body>
+    <div class="main">
+
+        <div class="c">
+            <div class="c1">
+                <p>
+                    <label for="userName">用户名</label>
+                    <input type="text" id="username" size="13px" readonly>
+                </p>
+                <p>
+                    <label for="passWord">登录密码：</label>
+                    <input type="password" id="password"><span>密码为6-16位</span>
+                </p>
+
+                <p>
+                    <label for="name">昵称：</label>
+                    <input type="text" id="nickname"><span>请输入昵称</span>
+                </p>
+                <p>
+                    <label for="NC">个性签名：</label>
+                    <input type="text" id="sign"><span>个性签名</span>
+                </p>
+                <p>
+                    <label for="tel">简介:</label>
+                    <input type="text" id="profile"><span>博客简介</span>
+                </p>
+                <p>
+                    <label for="email">博主分区：</label>
+                    <select id="blogtype">
+                    </select>
+                </p>
+
+
+                <z>
+                    <input name="sub" type="submit" onclick="regist();" value="提交">
+                    &nbsp;
+                </z>
+            </div>
+        </div>
+    </div>
+
+</html>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    //alert("1");
+    //alert(userid)
+
+    $(document).ready(function () {
+
+        //alert(articleid);
+        //showAllBlog(userid);
+        initText();
+
+    });
+    showAllBlog();
+    // initText();
+
+
+
+    function showAllBlog() {
+
+
+        $.getJSON("/listblogtype", function (data) {
+
+            $.each(data, function (idx, data) {
+                //alert(title1);
+
+                var typeoption = document.createElement("option");
+                typeoption.setAttribute("value", data.typeid);
+                typeoption.innerHTML = data.typename;
+
+                var ops = document.getElementById("blogtype");
+                ops.append(typeoption)
+
+            });
+
+
+
+        });
+
+    }
+
+
+
+
+
+
+    imgstring = "";
+    function regist() {
+        var username = $('#username').val();
+        var password = $('#password').val();
+        var nickname = $('#nickname').val();
+        var sign = $('#sign').val();
+        var profile = $('#profile').val();
+        var blogtype = $('#blogtype').val();
+
+        //#/register?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+        ///blogmanage?username=xxx&password=123&nickname=xxx&sign=xxx&profile=xxx&imagename=xxx&blogtype=xxx
+        $.get("/blogmanage?username=" + username + "&password=" + password + "&nickname=" + nickname + "&sign=" + sign + "&profile=" + profile + "&imagename=000" + "&blogtype=" + blogtype, function (data) {
+
+            alert(data);
+            location.reload();
+
+        });
+
+    }
+
+    function initText(username) {
+        var username = $.cookie('username');
+        var userpassword = $.cookie('userpassword');
+        //alert(username);
+        document.getElementById("username").value = username;
+        //alert();
+        document.getElementById("password").value = userpassword;
+        //alert(username);
+        $.getJSON("/getuserinfobyusername?username=" + username, function (data) {
+
+            document.getElementById("nickname").value = data.nickName;
+            console.log(data.nickName);
+            document.getElementById("sign").value = data.sign;
+            document.getElementById("profile").value = data.proFile;
+            //document.getElementById("blogtype").value=data.blogtype; 
+
+        });
+    }
+
+    function onChange(event) {
+        let file = event.target.files[0]
+        let reader = new FileReader()
+        reader.onload = function (event) {
+            // 图片的base64编码会在这里被打印出来
+            imgstring = event.target.result.replace(",", "|")
+            console.log(imgstring)
+        }
+        reader.readAsDataURL(file)
+    }
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+</script>

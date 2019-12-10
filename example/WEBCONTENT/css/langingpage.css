@@ -1,0 +1,55 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: "Microsoft Yahei", "Hiragino Sans GB", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* background-image: url("images/background.png");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed; */
+    background: #110915;
+}
+.main{
+    background: #f5f6fa;
+    width: 30em;
+    height: 20em;
+    margin: 0 auto;
+    position: relative;
+    top:8em;
+    border-radius:20px;
+}
+form{
+    text-align: center;
+}
+p{
+    margin-top: 1em;
+}
+#User_name{
+    margin-top: 3em;
+    width: 10em;
+    overflow: hidden;
+    font-size: 1.5em;
+}
+#User_password{
+    width: 10em;
+    overflow: hidden;
+    font-size: 1.5em;
+}
+#login{
+    width: 10em;
+    position: relative;
+    overflow: hidden;
+    background-color: #00a8ff;
+    font-size: 1.5em;
+    color: white;
+    border-style: none;
+}
+.registration{
+    text-decoration: none;
+    font-size: 1em;
+    position: absolute;
+    left: 18em;
+    color: #00a8ff;
+}
+.registration:hover{
+    text-decoration: underline;
+}

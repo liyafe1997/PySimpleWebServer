@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>User article manage</title>
+    <meta name="keywords" content="free blog template, blog layout, CSS, HTML" />
+    <meta name="description"
+        content="free blog website layout, blog template, blog layout which you can apply for any blog CMS" />
+    <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="contentslider.css" />
+    <script type="text/javascript" src="contentslider.js">
+    </script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+
+    <style>
+        .userp {
+            font-size: 25px;
+            color: #dbc1a7;
+        }
+
+        #templatemo_right {
+            width: 70px;
+            box-shadow: -1px -2px -2px 0 #7ed6df;
+            border-radius: 20px;
+        }
+
+        #templatemo_right {
+            position: relative;
+            float: right;
+            margin-top: 20px;
+            margin-left: 40px;
+            width: 330px;
+            padding: 70px 0 15px 0;
+        }
+
+
+        #flow_box {
+            position: absolute;
+            z-index: 1000;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="templatemo_header_panel">
+        <div id="templatemo_header_section">
+            <img id="avatar" src="" />
+            <div id="templatemo_title_section">个人博客空间</div>
+            <div id="templatemo_right">
+
+            </div>
+        </div>
+    </div> <!-- end of templatemo header panel -->
+
+    <div id="templatemo_menu_panel">
+        <div id="templatemo_menu_section">
+
+        </div>
+    </div> <!-- end of menu -->
+
+    <div id="templatemo_content_container">
+        <div id="templatemo_content">
+
+            <div id="templatemo_content_left">
+
+                <div id="main_body">
+                    <h1>博客链接</h1>
+                </div>
+
+                <div class="templatemo_post">
+                    <table id="contenttable" border="1" width="100%">
+                        <tr>
+                            <td>文章ID</td>
+                            <td>标题</td>
+                            <td>发布日期</td>
+                            <td>浏览次数</td>
+                            <td>评论数</td>
+                            <td>类型</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+
+
+            </div> <!-- end of content left -->
+
+            <div id="templatemo_content_right">
+
+                <!-- <div class="templatemo_right_section"> -->
+                <!-- <h2>功能</h2> -->
+
+                <!-- <button type="button" onclick="writeBLog()">写博客</button> -->
+
+                <!-- </div> -->
+
+                <div id="templatemo_right_section">
+                    <h2>友情链接</h2>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    </div>
+
+    <div id="templatemo_bottom_panel">
+
+    </div>
+
+
+</body>
+<script type="text/javascript">
+
+
+    var username = $.cookie('username');
+    var userpassword = $.cookie('userpassword');
+
+
+
+    if (username == null) {
+        var login_button = document.createElement("input");
+        var div = document.getElementById("templatemo_right");
+        login_button.setAttribute("type", "button");
+        login_button.setAttribute("value", "登陆");
+        login_button.setAttribute("onclick", "login()");
+        login_button.className = "login_button";
+        div.appendChild(login_button);
+    }
+    else {
+        var p = document.createElement("p");
+        p.className = "userp";
+        var c = document.createTextNode("用户：" + username);
+        p.appendChild(c);
+        var div = document.getElementById("templatemo_right");
+        div.appendChild(p);
+
+
+        var br = document.createElement("br")//换行
+        var quitbutton = document.createElement("input");
+        quitbutton.setAttribute("type", "button");
+        quitbutton.setAttribute("onclick", "quit()");
+        quitbutton.value = "退出账号";
+
+        var revisebutton = document.createElement("input");
+        revisebutton.setAttribute("type", "button");
+        revisebutton.value = "修改账户信息";
+        revisebutton.setAttribute("onclick", "revise()");
+
+        var div2 = document.createElement("div");
+
+        var writeblogbutton = document.createElement("input");
+        writeblogbutton.setAttribute("type", "button");
+        writeblogbutton.setAttribute("onclick", "writeblog()");
+        writeblogbutton.value = "写博客";
+
+        div2.id = "flow_box";
+        div2.appendChild(revisebutton);
+        div2.appendChild(br);
+        div2.appendChild(writeblogbutton)
+        div2.appendChild(br);
+        div2.appendChild(quitbutton);
+
+        p.onmouseover = function () {
+            div.appendChild(div2);
+            $('#flow_box').show();
+        }
+
+        p.onmouseout = function () {
+            timer = setTimeout(function () {
+                $('#flow_box').hide();
+            }, 700);
+
+        }
+    }
+
+    function login() {  //转登陆页面
+        window.location.href = '/login.html';
+    }
+
+
+    function writeblog() {
+        window.location.href = '/writeBlog.html';
+    }
+
+    function revise() {   //转修改页面
+        window.location.href = "/update.html";
+    }
+
+    function quit() {
+        console.log("退出");
+        $.cookie('username', null, { expires: -1 });
+        $.cookie('userpassword', null, { expires: -1 });
+        location.reload();
+    }
+
+
+
+    function Base64() {
+
+        // private property
+        _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+        // public method for encoding
+        this.encode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = _utf8_encode(input);
+            while (i < input.length) {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                } else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+                    _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+            }
+            return output;
+        }
+
+        // public method for decoding
+        this.decode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            while (i < input.length) {
+                enc1 = _keyStr.indexOf(input.charAt(i++));
+                enc2 = _keyStr.indexOf(input.charAt(i++));
+                enc3 = _keyStr.indexOf(input.charAt(i++));
+                enc4 = _keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+            }
+            output = _utf8_decode(output);
+            return output;
+        }
+
+        // private method for UTF-8 encoding
+        _utf8_encode = function (string) {
+            string = string.replace(/\r\n/g, "\n");
+            var utftext = "";
+            for (var n = 0; n < string.length; n++) {
+                var c = string.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                } else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                } else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+            return utftext;
+        }
+
+        // private method for UTF-8 decoding
+        _utf8_decode = function (utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+            while (i < utftext.length) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                } else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return string;
+        }
+    }
+
+
+
+    var userid = getQueryVariable("userid");
+    username = "";
+    nickName = "";
+    showAllBlog(userid);
+
+
+    showLink();
+
+    function writeBLog() {
+        window.location.href = '/writeBlog.html';
+
+    };
+
+
+    function Base64() {
+
+        // private property
+        _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+        // public method for encoding
+        this.encode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = _utf8_encode(input);
+            while (i < input.length) {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                } else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+                    _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+            }
+            return output;
+        }
+
+        // public method for decoding
+        this.decode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            while (i < input.length) {
+                enc1 = _keyStr.indexOf(input.charAt(i++));
+                enc2 = _keyStr.indexOf(input.charAt(i++));
+                enc3 = _keyStr.indexOf(input.charAt(i++));
+                enc4 = _keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+            }
+            output = _utf8_decode(output);
+            return output;
+        }
+
+        // private method for UTF-8 encoding
+        _utf8_encode = function (string) {
+            string = string.replace(/\r\n/g, "\n");
+            var utftext = "";
+            for (var n = 0; n < string.length; n++) {
+                var c = string.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                } else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                } else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+            return utftext;
+        }
+
+        // private method for UTF-8 decoding
+        _utf8_decode = function (utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+            while (i < utftext.length) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                } else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return string;
+        }
+    }
+
+    function showLink() {
+
+        $.getJSON("/listlink", function (data) {
+            console.log(data);
+
+            var linkNameArray = new Array();
+            var linkUrlArray = new Array();
+
+            $.each(data, function (idx, obj) {
+                //console.log(obj.content);
+                var linkname = obj.linkName;
+                var linkurl = obj.linkUrl;
+
+                linkNameArray.push(linkname);
+                linkUrlArray.push(linkurl);
+            });
+
+
+            for (t = 0; t < linkNameArray.length; t++) {
+                var a = document.createElement("a");
+                var node = document.createTextNode(linkUrlArray[t]);
+
+                a.appendChild(node);
+
+
+                a.setAttribute("href", linkUrlArray[t]);
+                var div = document.getElementById("templatemo_right_section"); //改为存放标题的DIV
+                div.appendChild(a);
+                var br = document.createElement("br");
+                div.appendChild(br);
+
+
+            }
+
+        });
+
+
+    }
+
+
+    function showAllBlog(userid) {
+
+
+        $.getJSON("/getuserinfobyuserid?userid=" + userid, function (userdata) {
+            username = userdata.userName;
+            nickname = userdata.nickName;
+            // imgstring = userdata.imageName;
+            imgstring = imgstring.replace('|', ',');
+            imgstring = imgstring.replace('!', ' ');
+            var b = new Base64();
+            // document.getElementById("avatar").setAttribute("src",b.decode(imgstring));
+
+        });
+
+
+        $.getJSON("/listarticle?userid=" + userid, function (data) {
+
+
+            document.getElementById("main_body").innerHTML = "<h1>用户:" + username + " 昵称:" + nickname + "</h1>";
+
+
+
+
+            $.each(data, function (idx, data) {
+                //alert(title1);
+                //var time = data.replyHit;
+                var articleid = data.id;
+
+                var tr = document.createElement("tr");
+                var articletd = document.createElement("td");
+
+
+                var titletd = document.createElement("td");
+
+                var a = document.createElement("a");
+                var b = new Base64();
+                var title = data.title
+                title = title.replace('|', ',');
+                title = title.replace('!', ' ');
+                var ti = b.decode(data.title);
+                a.innerHTML = ti;
+
+
+
+                a.innerHTML = ti;
+                a.setAttribute("href", "/blog3.html?id=" + articleid);
+                titletd.appendChild(a);
+                var datetd = document.createElement("td");
+                var clicktime = document.createElement("td");
+                var replytime = document.createElement("td");
+                //var summarytd = document.createElement("td");
+                //var keywordtd = document.createElement("td");
+                var type = document.createElement("td");
+
+
+                articletd.append(document.createTextNode(data.id));
+                //usernametd.append(document.createTextNode(username));
+                //titletd.append(document.createTextNode(data.title));
+
+                datetd.append(document.createTextNode(data.releaseDate));
+                clicktime.append(document.createTextNode(data.clickHit));
+                replytime.append(document.createTextNode(data.replyHit));
+                type.append(document.createTextNode(data.typeId));
+                tr.append(articletd)
+                tr.append(titletd)
+                tr.append(datetd)
+
+                tr.append(clicktime)
+                tr.append(replytime)
+                tr.append(type)
+                var table = document.getElementById("contenttable");
+                table.append(tr)
+
+            });
+        });
+
+
+    }
+
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+</script>

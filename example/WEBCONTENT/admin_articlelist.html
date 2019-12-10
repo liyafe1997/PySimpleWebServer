@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>User article manage</title>
+    <meta name="keywords" content="free blog template, blog layout, CSS, HTML" />
+    <meta name="description"
+        content="free blog website layout, blog template, blog layout which you can apply for any blog CMS" />
+    <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="contentslider.css" />
+    <script type="text/javascript" src="contentslider.js">
+    </script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <script src="json2.js"></script>
+    <script type="text/javascript" src="json2.js"></script>
+    <script src="cycle.js"></script>
+
+</head>
+
+<body>
+    <div id="templatemo_header_panel">
+        <div id="templatemo_header_section">
+            <div id="templatemo_title_section"><a href="/admin_userlist.html">管理首页</a></div>
+            <div id="templatemo_title_section">文章管理</div>
+        </div>
+    </div> <!-- end of templatemo header panel -->
+
+    <div id="templatemo_menu_panel">
+        <div id="templatemo_menu_section">
+
+        </div>
+    </div> <!-- end of menu -->
+
+    <div id="templatemo_content_container">
+        <div id="templatemo_content">
+            <div id="templatemo_content_left">
+                <div id="main_body">
+
+
+
+                </div>
+
+                <table id="contenttable" width="100%">
+                    <tr>
+                        <td>文章ID</td>
+                        <td>用户名</td>
+                        <td>标题</td>
+                        <td>日期</td>
+                        <td>摘要</td>
+                        <td>关键词</td>
+                        <td>操作</td>
+                    </tr>
+
+                </table>
+
+
+
+
+
+            </div>
+
+
+        </div> <!-- end of content left -->
+
+        <!-- end of right content -->
+    </div> <!-- end of content -->
+    </div> <!-- end of content container -->
+
+    <div id="templatemo_bottom_panel">
+        <!-- end of templatemo bottom section -->
+    </div>
+    <!-- end of templatemo bottom panel -->
+    <!--  HTML CSS Template Designed -->
+    <div id="templatemo_footer_panel">
+        <div id="templatemo_footer_section">
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+
+
+
+    function Base64() {
+
+        // private property
+        _keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+
+        // public method for encoding
+        this.encode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = _utf8_encode(input);
+            while (i < input.length) {
+                chr1 = input.charCodeAt(i++);
+                chr2 = input.charCodeAt(i++);
+                chr3 = input.charCodeAt(i++);
+                enc1 = chr1 >> 2;
+                enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+                enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+                enc4 = chr3 & 63;
+                if (isNaN(chr2)) {
+                    enc3 = enc4 = 64;
+                } else if (isNaN(chr3)) {
+                    enc4 = 64;
+                }
+                output = output +
+                    _keyStr.charAt(enc1) + _keyStr.charAt(enc2) +
+                    _keyStr.charAt(enc3) + _keyStr.charAt(enc4);
+            }
+            return output;
+        }
+
+        // public method for decoding
+        this.decode = function (input) {
+            var output = "";
+            var chr1, chr2, chr3;
+            var enc1, enc2, enc3, enc4;
+            var i = 0;
+            input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+            while (i < input.length) {
+                enc1 = _keyStr.indexOf(input.charAt(i++));
+                enc2 = _keyStr.indexOf(input.charAt(i++));
+                enc3 = _keyStr.indexOf(input.charAt(i++));
+                enc4 = _keyStr.indexOf(input.charAt(i++));
+                chr1 = (enc1 << 2) | (enc2 >> 4);
+                chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+                chr3 = ((enc3 & 3) << 6) | enc4;
+                output = output + String.fromCharCode(chr1);
+                if (enc3 != 64) {
+                    output = output + String.fromCharCode(chr2);
+                }
+                if (enc4 != 64) {
+                    output = output + String.fromCharCode(chr3);
+                }
+            }
+            output = _utf8_decode(output);
+            return output;
+        }
+
+        // private method for UTF-8 encoding
+        _utf8_encode = function (string) {
+            string = string.replace(/\r\n/g, "\n");
+            var utftext = "";
+            for (var n = 0; n < string.length; n++) {
+                var c = string.charCodeAt(n);
+                if (c < 128) {
+                    utftext += String.fromCharCode(c);
+                } else if ((c > 127) && (c < 2048)) {
+                    utftext += String.fromCharCode((c >> 6) | 192);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                } else {
+                    utftext += String.fromCharCode((c >> 12) | 224);
+                    utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                    utftext += String.fromCharCode((c & 63) | 128);
+                }
+
+            }
+            return utftext;
+        }
+
+        // private method for UTF-8 decoding
+        _utf8_decode = function (utftext) {
+            var string = "";
+            var i = 0;
+            var c = c1 = c2 = 0;
+            while (i < utftext.length) {
+                c = utftext.charCodeAt(i);
+                if (c < 128) {
+                    string += String.fromCharCode(c);
+                    i++;
+                } else if ((c > 191) && (c < 224)) {
+                    c2 = utftext.charCodeAt(i + 1);
+                    string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+                    i += 2;
+                } else {
+                    c2 = utftext.charCodeAt(i + 1);
+                    c3 = utftext.charCodeAt(i + 2);
+                    string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+                    i += 3;
+                }
+            }
+            return string;
+        }
+    }
+
+
+    //alert("1");
+    var userid = getQueryVariable("userid")
+    username = "";
+    nickName = "";
+    //alert(userid)
+    showAllBlog(userid);
+    function showAllBlog(userid) {
+        //Get Username
+        $.getJSON("/getuserinfobyuserid?userid=" + userid, function (userdata) {
+            username = userdata.userName;
+            nickname = userdata.nickName;
+
+        });
+        //--Get Username
+
+        $.getJSON("/listarticle?userid=" + userid, function (data) {
+            //alert(data);
+
+            var articlesArray = data;
+            var articleName = new Array();
+            var articleId = new Array();
+            document.getElementById("main_body").innerHTML = "<h1>管理的用户:" + username + "<br><br><br>昵称:" + nickname + "<br><br><br>点击文章标题可查看文章并管理评论</h1><br><br><br><br>";
+
+
+
+
+            $.each(data, function (idx, data) {
+                //alert(title1);
+                var time = data.replyHit;
+                var articleid = data.id;
+                var tr = document.createElement("tr");
+                var articletd = document.createElement("td");
+                var usernametd = document.createElement("td");
+                var titletd = document.createElement("td");
+                var datetd = document.createElement("td");
+                var summarytd = document.createElement("td");
+                var keywordtd = document.createElement("td");
+                var operationtd = document.createElement("td");
+
+                var b = new Base64();
+                var title = data.title
+                title = title.replace('|', ',');
+                title = title.replace('!', ' ');
+                var ti = b.decode(data.title);
+
+                articletd.append(document.createTextNode(articleid));
+                usernametd.append(document.createTextNode(username));
+                var a = document.createElement('a');
+                a.setAttribute("href", "/admin_commentlist.html?articleid=" + articleid + "&articletitle=" + ti);
+                a.innerHTML = ti;
+                titletd.append(a);
+                datetd.append(document.createTextNode(data.releaseDate));
+                summarytd.append(document.createTextNode(data.summary));
+                keywordtd.append(document.createTextNode(data.keyWord));
+                var operationlink = document.createElement("button")
+                operationlink.innerText = "删除";
+                operationlink.setAttribute("onclick", "deleteArticle(" + articleid + ")");
+                operationtd.append(operationlink);
+                tr.append(articletd)
+                tr.append(usernametd)
+                tr.append(titletd)
+                tr.append(datetd)
+                tr.append(summarytd)
+                tr.append(keywordtd)
+                tr.append(operationtd)
+                var table = document.getElementById("contenttable");
+                table.append(tr)
+
+            });
+
+
+            for (t = 0; t < articleId.length; t++) {
+                var a = document.createElement("a");
+                var node = document.createTextNode(articleName[t]);
+                a.appendChild(node);
+                var targetUrl = "127.0.0.1:8081/getarticle?id=" + articleId[t];
+                a.setAttribute("href", targetUrl);
+                var div = document.getElementById("main_body"); //改为存放标题的DIV
+                div.appendChild(a);
+                var br = document.createElement("br")
+                div.appendChild(br);
+
+
+            }
+
+        });
+
+    }
+
+    function deleteArticle(articleid) {
+        var adminusername = $.cookie('adminusername');
+        var adminpassword = $.cookie('adminpassword');
+        console.log(adminusername);
+        console.log(adminpassword);
+        $.get("/deletearticle?adminuser=" + adminusername + "&adminpassword=" + adminpassword + "&articleid=" + articleid, function (data) {
+
+            alert(data);
+            location.reload();
+
+        });
+
+    }
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) { return pair[1]; }
+        }
+        return (false);
+    }
+
+</script>

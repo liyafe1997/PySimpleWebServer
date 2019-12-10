@@ -1,0 +1,220 @@
+<!DOCTYPE html >
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Admin</title>
+    <meta name="keywords" content="free blog template, blog layout, CSS, HTML" />
+    <meta name="description" content="free blog website layout, blog template, blog layout which you can apply for any blog CMS" />
+    <link href="templatemo_style.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="contentslider.css" />
+    <script type="text/javascript" src="contentslider.js">
+    </script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <script src="json2.js"></script>
+    <script type="text/javascript" src="json2.js"></script>
+    <script src="cycle.js"></script>
+
+</head>
+
+<body>
+    <div id="templatemo_header_panel">
+        <div id="templatemo_header_section">
+            <div id="templatemo_title_section">用户管理</div><div id="templatemo_title_section"><a href="/admin_link.html">链接管理</a></div>
+        </div>
+    </div> <!-- end of templatemo header panel -->
+
+    <div id="templatemo_menu_panel">
+        <div id="templatemo_menu_section">
+
+        </div>
+    </div> <!-- end of menu -->
+
+    <div id="templatemo_content_container">
+        <div id="templatemo_content">
+            <div id="templatemo_content_left">
+                <div id="main_body">
+
+
+
+                </div>
+
+                <table>
+                    <tr>
+                        <td>用户ID</td>
+                        <td>博主用户名</td>
+                        <td>昵称</td>
+                        <td>简介</td>
+                        <td>博客类型</td>
+                        <td>操作</td>
+
+                    </tr>
+                    <tr>
+                        <td id="c_link" width="100"></td>
+                        <td id="blog_link" width="100"></td>
+                        <td id="nicknames" width="100"></td>
+                        <td id="a_link" width="100"></td>
+                        <td id="b_link" width="100"></td>
+                        <td id="deletebuttons" width="100"></td>
+                    </tr>
+
+                </table>
+
+
+
+
+            </div>
+
+
+        </div> <!-- end of content left -->
+
+        <!-- end of right content -->
+    </div> <!-- end of content -->
+    </div> <!-- end of content container -->
+
+    <div id="templatemo_bottom_panel">
+        <!-- end of templatemo bottom section -->
+    </div>
+    <!-- end of templatemo bottom panel -->
+    <!--  HTML CSS Template Designed -->
+    <div id="templatemo_footer_panel">
+        <div id="templatemo_footer_section">
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript">
+    blogtypedata = "";
+    $(document).ready(function () {
+        showBlogList();
+    });
+    var adminusername = $.cookie('adminusername');
+    document.getElementById("main_body").innerHTML = "<h1>管理员:" + adminusername + "<br><br><br>点击博主的用户名可管理该博主文章<br><br></h1>";
+
+    function showBlogList() {     //显示所有blog
+
+        //Get blogtypename
+        $.getJSON("/listblogtype", function (_blogtypedata) {
+            blogtypedata = _blogtypedata;
+
+        });
+        //--Get blogtypename
+
+
+        var url = "http://127.0.0.1:8081/list";
+        $.getJSON(url, function (data) {
+            var dataArray = data;
+            var nickNameArray = new Array();
+            var userNameArray = new Array();
+            var profileArray = new Array();
+            var useridArray = new Array();
+            var blogtypeidArray = new Array();
+            //alert(nameArray);
+            $.each(data, function (idx, obj) {
+                var username = obj.username
+                var nickname = obj.nickname;
+                var profile = obj.proFile;
+                var userid = obj.userid;
+                var blogtypeid = obj.blogtypeid;
+                nickNameArray.push(nickname);
+                userNameArray.push(username);
+                profileArray.push(profile);
+                useridArray.push(userid);
+                blogtypeidArray.push(blogtypeid);
+            });
+            for (t = 0; t < nickNameArray.length; t++) {
+                var p1 = document.createElement("tr");
+                var a = document.createElement("a");
+                a.innerHTML = userNameArray[t];
+                a.setAttribute("href", "/admin_articlelist.html?userid=" + useridArray[t]);
+                p1.appendChild(a);
+
+                var div1 = document.getElementById("blog_link");
+                div1.appendChild(p1);
+                var br1 = document.createElement("br");
+                div1.appendChild(br1);
+            }
+            for (t = 0; t < profileArray.length; t++) {
+                var p2 = document.createElement("tr");
+                var node2 = document.createTextNode(profileArray[t]);
+                p2.appendChild(node2);
+
+                var div2 = document.getElementById("a_link");
+                div2.appendChild(p2);
+                var br2 = document.createElement("br");
+                div2.appendChild(br2);
+            }
+            for (t = 0; t < profileArray.length; t++) {
+                var p2 = document.createElement("tr");
+                var node2 = document.createTextNode(nickNameArray[t]);
+                p2.appendChild(node2);
+
+                var div2 = document.getElementById("nicknames");
+                div2.appendChild(p2);
+                var br2 = document.createElement("br");
+                div2.appendChild(br2);
+            }
+
+            for (t = 0; t < blogtypeidArray.length; t++) {
+                var p3 = document.createElement("tr");
+                $.each(blogtypedata, function (idx, blogtypedata) {
+                    if (blogtypedata.typeid == blogtypeidArray[t]) {
+                        node3 = document.createTextNode(blogtypedata.typename);
+
+                    }
+                });
+                p3.appendChild(node3);
+
+                var div3 = document.getElementById("b_link");
+                div3.appendChild(p3);
+                var br3 = document.createElement("br");
+                div3.appendChild(br3);
+            }
+            for (t = 0; t < useridArray.length; t++) {
+                var p = document.createElement("tr");
+                var node = document.createTextNode(useridArray[t]);
+                p.appendChild(node);
+
+                var div = document.getElementById("c_link");
+                div.appendChild(p);
+                var br = document.createElement("br");
+                div.appendChild(br);
+            }
+            for (t = 0; t < useridArray.length; t++) {
+
+                var br = document.createElement("br");
+                var p = document.createElement("tr");
+                var b = document.createElement("a");
+                b.setAttribute("onclick", "deleteUser(" + useridArray[t] + ")");
+                b.setAttribute("href", "javascript:void(0)");
+                b.innerText = "删除用户" + userNameArray[t];
+                var div = document.getElementById("deletebuttons");
+                p.append(b);
+                div.appendChild(p);
+
+                div.appendChild(br);
+            }
+        });
+
+
+
+
+
+    }
+
+    function deleteUser(userid) {
+        var adminusername = $.cookie('adminusername');
+        var adminpassword = $.cookie('adminpassword');
+        console.log(adminusername);
+        console.log(adminpassword);
+        $.get("/deleteuser?adminuser=" + adminusername + "&adminpassword=" + adminpassword + "&userid=" + userid, function (data) {
+
+            alert(data);
+            location.reload();
+
+        });
+
+    }
+</script>
+
+</html>

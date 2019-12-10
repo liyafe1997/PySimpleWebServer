@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员界面</title>
+    <script type="test/javascript" src="js/control.js"></script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <td>username</td>
+            <td>profile</td>
+            <td>blogtypeid</td>
+            <td>userid</td>
+        </tr>
+        <tr >
+            <td id="blog_link" width="100"></td>
+            <td id="a_link" width="100"></td>
+            <td id="b_link" width="100"></td>
+            <td id="c_link" width="100"></td>
+        </tr>
+
+    </table>
+    <span class="body">
+    </div>
+    <form>
+    <button id="deleteusderid">删除</button>
+        <input type="text" placeholder="根据userid删除">
+        <input type="text" placeholder="根据articleid删除">
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+        $(document).ready(function(){
+            showBlogList();
+        });
+function showBlogList(){     //显示所有blog
+    var url="http://127.0.0.1:8081/list";
+        $.getJSON(url,function(data){
+            var dataArray=data;
+            var nickNameArray= new Array();
+            var profileArray=new Array();
+            var useridArray=new Array();
+            var blogtypeidArray=new Array();
+            //alert(nameArray);
+            $.each(data, function(idx,obj) {
+                var nickname=obj.username;
+                var profile=obj.proFile;
+                var userid=obj.userid;
+                var blogtypeid=obj.blogtypeid;
+                nickNameArray.push(nickname);
+                profileArray.push(profile);
+                useridArray.push(userid);
+                blogtypeidArray.push(blogtypeid);
+            });
+            for(t=0;t<nickNameArray.length;t++)
+            {
+                var p1=document.createElement("p");
+                var node1 = document.createTextNode(nickNameArray[t]);
+                p1.appendChild(node1);
+                p1.setAttribute("href","#");
+                var div1=document.getElementById("blog_link");
+                div1.appendChild(p1);
+                var br1 = document.createElement("br");
+                div1.appendChild(br1);
+            }
+            for(t=0;t<profileArray.length;t++)
+            {
+                var p2=document.createElement("p");
+                var node2 = document.createTextNode(profileArray[t]);
+                p2.appendChild(node2);
+                p2.setAttribute("href","#");
+                var div2=document.getElementById("a_link");
+                div2.appendChild(p2);
+                var br2 = document.createElement("br");
+                div2.appendChild(br2);
+            }
+
+            for(t=0;t<blogtypeidArray.length;t++)
+            {
+                var p3=document.createElement("p");
+                var node3 = document.createTextNode(blogtypeidArray[t]);
+                p3.appendChild(node3);
+                p3.setAttribute("href","#");
+                var div3=document.getElementById("b_link");
+                div3.appendChild(p3);
+                var br3 = document.createElement("br");
+                div3.appendChild(br3);
+            }
+            for(t=0;t<useridArray.length;t++)
+            {
+                var p=document.createElement("p");
+                var node = document.createTextNode(useridArray[t]);
+                p.appendChild(node);
+                p.setAttribute("href","#");
+                var div=document.getElementById("c_link");
+                div.appendChild(p);
+                var br = document.createElement("br");
+                div.appendChild(br);
+            }
+        });
+
+
+
+    }
+</script>
+</html>

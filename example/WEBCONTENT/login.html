@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>网上个人博客</title>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/langingpage.css">
+</head>
+
+<body>
+    <div class="main">
+        <center>
+            <p>
+                <input type="text" id="User_name" name="usname" placeholder="用户名">
+            </p>
+            <p>
+                <input type="password" id="User_password" name="uspassword" placeholder="密码">
+            </p>
+            <p>
+                <input type="submit" onClick="Login()" id="login" name="uslogin" value="登陆">
+            </p>
+            <p><a class="registration" href="regist.html" target="_blank">立即注册</a></p>
+        </center>
+    </div>
+</body>
+<script type="text/javascript">
+
+    showAllBlog();
+    function showAllBlog() {
+
+
+        $.getJSON("/listblogtype", function (data) {
+
+            $.each(data, function (idx, data) {
+                //alert(title1);
+
+                var typeoption = document.createElement("a");
+                typeoption.setAttribute("href", "http://127.0.0.1:8081/indexblogtype.html?typeid=" + data.typeid);
+                typeoption.innerHTML = data.typename;
+
+                var ops = document.getElementById("blogtype");
+                ops.append(typeoption)
+
+            });
+
+
+
+        });
+
+    }
+    function Login() {
+
+        var userName = $('#User_name').val();
+        var passWord = $('#User_password').val();
+
+        var url = "/login?username=" + userName + "&password=" + passWord;
+
+
+        $.get(url, function (data) {
+            if (data == "ok") {
+
+                $.cookie('username', userName);
+                $.cookie('userpassword', passWord);
+                // window.location.href = '/index.html';
+                window.history.back(-1); 
+            }
+            else {
+                alert("账号或密码错误");
+            }
+
+        });
+
+    }
+
+    document.onkeydown=function(event){ //支持回车登陆
+    var e=event||window.event;
+    if(e&&e.keyCode==13){
+        $("#login").click();
+    }
+}
+
+
+
+</script>
+
+</html>

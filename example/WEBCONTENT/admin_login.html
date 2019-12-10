@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Login</title>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="jquery.cookie.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/langingpage.css">
+</head>
+
+<body>
+    <div class="main">
+        <center>
+            <p>
+                <input type="text" id="User_name" name="usname" placeholder="Admin Username">
+            </p>
+            <p>
+                <input type="password" id="User_password" name="uspassword" placeholder="Admin Password">
+            </p>
+
+        </center>
+        <p>
+                <center><input type="submit" onClick="Login()" id="login" name="uslogin" value="Admin Login"></center>
+            </p>
+        <div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+
+    function Login() {
+        //alert("1");
+
+        var userName = $('#User_name').val();
+        console.log(userName);
+        var passWord = $('#User_password').val();
+        console.log(passWord);
+        var url = "/adminlogin?adminusername=" + userName + "&adminpassword=" + passWord;
+        //alert(url);
+
+
+        $.get(url, function (data) {
+            //alert(data);
+            //alert(data)
+            if (data == "ok") {
+                alert("Login succeed!");
+                window.location.href = '/admin_userlist.html';
+                $.cookie('adminusername', userName);
+                $.cookie('adminpassword', passWord);
+            }
+            else {
+                window.location.href = '/admin_login.html';
+                alert("Login failed!");
+
+            }
+
+        });
+
+
+
+    }
+
+
+
+
+
+</script>
+
+</html>
