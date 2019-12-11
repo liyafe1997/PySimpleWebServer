@@ -3,6 +3,7 @@
 **!! This is not a HTML Repo, it's python. The reason of github marked it is a HTML project is a lot HTML pages in the example!!**
 
 # 简体中文（Chinese Simplified）
+# I am tired to write this so English is temporarily unavailable. Before I written English down, just Google Translate please!
 
 这是一个非常简单的，用python实现http服务（尤其是microservice）的Framework。甚至我不敢称它为一个framework，只是一个template，方便我需要实现http service的时候直接往上面加东西。
 
